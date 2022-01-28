@@ -26,5 +26,5 @@ export const MONTH = 'month';
 export const YEAR = 'year';
 export const WAIT_FOR_3DS_RESPONSE_TIMEOUT_DEFAULT = 2E4;
 export const AUTO_FORMAT_DEFAULT_SEPARATOR = " ";
-export const IFIELDS_VERSION = '2.11.2112.1402-beta';
+export const IFIELDS_VERSION = '2.12.2201.2101';
 export const IFIELD_ORIGIN = "https://cdn.cardknox.com";
