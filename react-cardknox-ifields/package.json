@@ -1,6 +1,6 @@
 {
-  "name": "react-cardknox-ifields",
-  "version": "2.0.0",
+  "name": "@cardknox/react-ifields",
+  "version": "1.0.1",
   "description": "A React component for Cardknox iFields",
   "license": "MIT",
   "main": "build/index.js",
@@ -17,8 +17,15 @@
     "build": "webpack"
   },
   "author": {
-    "name": "msteintech",
-    "email": "msteintech@gmail.com"
+    "email": "info@cardknox.com"
+  },
+  "bugs": {
+    "url": "https://www.cardknox.com/contact/",
+    "email": "developersupport@cardknox.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cardknox/react-cardknox-ifields.git"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -32,7 +39,10 @@
   "keywords": [
     "react",
     "cardknox",
+    "ifield",
     "ifields",
-    "ifield"
+    "payment",
+    "credit card",
+    "gateway"
   ]
 }
