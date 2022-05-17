@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^16.8.6",
-    "react-cardknox-ifields": "file:../react-cardknox-ifields",
+    "@cardknox/react-ifields": "file:../react-cardknox-ifields",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
   },

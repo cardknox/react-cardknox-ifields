@@ -1,6 +1,6 @@
 
 import React from 'react';
-import IField, { CARD_TYPE, CVV_TYPE } from 'react-cardknox-ifields';
+import IField, { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
 
 
 export default class App extends React.Component {

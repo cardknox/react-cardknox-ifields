@@ -49,7 +49,6 @@ export interface Props {
     options: Options,
     issuer: string,
     type: string,
-    src: string,
     onLoad: () => void,
     onUpdate: (data: UpdateData) => void,
     onSubmit: () => void,
