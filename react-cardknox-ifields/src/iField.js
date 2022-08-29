@@ -80,7 +80,7 @@ export default class IField extends React.Component {
         switch (data.action) {
             case LOADED:
                 this.log("Message received: ifield loaded");
-                this.onLoad();
+                this.setState({ iFrameLoaded: true }, this.onLoad);
                 break;
             case TOKEN:
                 this.log("Message received: " + TOKEN);
@@ -105,9 +105,8 @@ export default class IField extends React.Component {
             this.postMessage(data);
         }
     }
-    onLoad() {
+    onLoad = () => {
         var props = this.props;
-        this.setState({ iFrameLoaded: true });
         this.setAccount(props.account);
         if (props.threeDS.enable3DS) {
             this.enable3DS(props.threeDS.waitForResponse, props.threeDS.waitForResponseTimeout);
