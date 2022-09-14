@@ -8,6 +8,7 @@ module.exports = {
     filename: 'index.js',
     libraryTarget: 'commonjs2'
   },
+  mode: 'production',
   module: {
     rules: [
       {
@@ -15,7 +16,7 @@ module.exports = {
         loader: 'babel-loader',
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|bower_components|build)/,
-        query: {
+        options: {
           presets: ['env'],
           plugins: ['transform-class-properties']
         }
