@@ -37,7 +37,7 @@ export default class App extends React.Component {
             enableLogging: true,
             autoFormat: true,
             autoFormatSeparator: ' ',
-            autoSubmit: true,
+            autoSubmit: false,
             iFieldstyle: {
 
             },
@@ -53,6 +53,7 @@ export default class App extends React.Component {
             issuer: ''
         };
         this.cvvRef = React.createRef();
+        this.cardRef = React.createRef();
     }
     render() {
         return (
@@ -66,6 +67,7 @@ export default class App extends React.Component {
                     onUpdate={this.onUpdate}
                     onSubmit={this.onSubmit}
                     onToken={this.onToken}
+                    ref={this.cardRef}
                     onError={this.onError} />
                 <IField
                     type={CVV_TYPE}
@@ -80,6 +82,7 @@ export default class App extends React.Component {
                     ref={this.cvvRef}
                     onError={this.onError} />
                 <button style={{display: 'block'}} onClick={this.getToken}>Get CVV Token</button>
+                <button style={{display: 'block'}} onClick={this.getCard}>Get Card Token</button>
             </>
         );
     }
@@ -102,5 +105,8 @@ export default class App extends React.Component {
     }
     getToken = () => {
         this.cvvRef.current.getToken();
+    }
+    getCard = () => {
+        this.cardRef.current.getToken();
     }
 }
