@@ -16,10 +16,6 @@ module.exports = {
         loader: 'babel-loader',
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|bower_components|build)/,
-        options: {
-          presets: ['env'],
-          plugins: ['transform-class-properties']
-        }
       }
     ]
   },
