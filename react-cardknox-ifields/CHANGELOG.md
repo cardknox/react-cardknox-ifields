@@ -1,5 +1,6 @@
 # Changelog
 
+## changelog for version 1.0.2
 ## changelog for version 1.0.1
 - fix for setting 'loaded' state
 - update React version
