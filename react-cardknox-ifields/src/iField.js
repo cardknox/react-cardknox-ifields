@@ -135,6 +135,7 @@ export default class IField extends React.Component {
      * @param {{data: TokenData}} param0 
      */
     onToken({ data }) {
+        clearTimeout(this.state.timeoutcallback)
         if (data.result === ERROR) {
             this.log("Token Error: " + data.errorMessage);
             if (this.props.onError)
@@ -209,12 +210,20 @@ export default class IField extends React.Component {
         this.logAction(INIT);
         this.postMessage(message);
     }
-    getToken() {
+        getToken() {
         var message = {
             action: GET_TOKEN
-        };
+        };        
         this.logAction(GET_TOKEN);
         this.postMessage(message);
+        this.setState({timeoutcallback: setTimeout(() => {
+            this.onToken({
+                data: {
+                    result: ERROR,
+                    errorMessage: "Transaction timed out."
+                }
+            })
+        }, 60000)});
     }
     /**
      * 
