@@ -210,10 +210,10 @@ export default class IField extends React.Component {
         this.logAction(INIT);
         this.postMessage(message);
     }
-        getToken() {
+    getToken() {
         var message = {
             action: GET_TOKEN
-        };        
+        };
         this.logAction(GET_TOKEN);
         this.postMessage(message);
         this.setState({timeoutcallback: setTimeout(() => {
