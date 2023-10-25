@@ -37,36 +37,36 @@ export default class IField extends React.Component {
         window.removeEventListener('message', this.onMessage);
     }
     componentDidUpdate(prevProps) {
-if (this.props.account !== prevProps.account)
-        this.setAccount(this.props.account);
+        if (this.props.account !== prevProps.account)
+            this.setAccount(this.props.account);
         if (this.props.threeDS.enable3DS) {
-if (this.props.threeDS.enable3DS !== prevProps.threeDS.enable3DS)
-            this.enable3DS(this.props.threeDS.waitForResponse, this.props.threeDS.waitForResponseTimeout);
-if (this.props.threeDS.amount !== prevProps.threeDS.amount)
-            this.update3DS(AMOUNT, this.props.threeDS.amount);
-if (this.props.threeDS.month !== prevProps.threeDS.month)
-            this.update3DS(MONTH, this.props.threeDS.month);
-if (this.props.threeDS.year !== prevProps.threeDS.year)
-            this.update3DS(YEAR, this.props.threeDS.year);
+            if (this.props.threeDS.enable3DS !== prevProps.threeDS.enable3DS)
+                this.enable3DS(this.props.threeDS.waitForResponse, this.props.threeDS.waitForResponseTimeout);
+            if (this.props.threeDS.amount !== prevProps.threeDS.amount)
+                this.update3DS(AMOUNT, this.props.threeDS.amount);
+            if (this.props.threeDS.month !== prevProps.threeDS.month)
+                this.update3DS(MONTH, this.props.threeDS.month);
+            if (this.props.threeDS.year !== prevProps.threeDS.year)
+                this.update3DS(YEAR, this.props.threeDS.year);
         }
-if (this.props.issuer !== prevProps.issuer)
-        this.updateIssuer(this.props.issuer);
+        if (this.props.issuer !== prevProps.issuer)
+            this.updateIssuer(this.props.issuer);
         if (this.props.options.autoFormat) {
-if (this.props.options.autoFormat !== prevProps.options.autoFormat ||
+            if (this.props.options.autoFormat !== prevProps.options.autoFormat ||
                 this.props.options.autoFormatSeparator !== prevProps.options.autoFormatSeparator)
-            this.enableAutoFormat(this.props.options.autoFormatSeparator);
+                this.enableAutoFormat(this.props.options.autoFormatSeparator);
         }
-if (this.props.options.autoSubmit) {
+        if (this.props.options.autoSubmit) {
             if (this.props.options.autoSubmit !== prevProps.options.autoSubmit ||
                 this.props.options.autoSubmitFormId !== prevProps.options.autoSubmitFormId)
-        this.enableAutoSubmit(this.props.options.autoSubmitFormId);
-}
+                this.enableAutoSubmit(this.props.options.autoSubmitFormId);
+        }
         if (this.props.options.enableLogging !== prevProps.options.enableLogging)
             this.enableLogging();
-if (this.props.options.placeholder !== prevProps.options.placeholder)
-        this.setPlaceholder(this.props.options.placeholder);
-if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
-        this.setStyle(this.props.options.iFieldstyle);
+        if (this.props.options.placeholder !== prevProps.options.placeholder)
+            this.setPlaceholder(this.props.options.placeholder);
+        if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
+            this.setStyle(this.props.options.iFieldstyle);
     }
     //----------------------Events
     /**
@@ -74,7 +74,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {MessageEvent} e 
      */
     onMessage = (e) => {
-        let data = e.data;
+        var data = e.data;
         if (e.source !== this.iFrameRef.current.contentWindow)
             return;
         switch (data.action) {
@@ -106,7 +106,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         }
     }
     onLoad = () => {
-        let props = this.props;
+        var props = this.props;
         this.setAccount(props.account);
         if (props.threeDS.enable3DS) {
             this.enable3DS(props.threeDS.waitForResponse, props.threeDS.waitForResponseTimeout);
@@ -173,7 +173,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         //call first before submit is triggered
         if (this.props.onSubmit)
             this.props.onSubmit();
-        if (data?.formId) {
+        if (data && data.formId) {
             document.getElementById(data.formId).dispatchEvent(new Event("submit", {
                 bubbles: true,
                 cancelable: true
@@ -183,7 +183,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
     //----------------------/
     //----------------------Actions
     ping() {
-        let message = {
+        var message = {
             action: PING
         };
         this.logAction(PING);
@@ -194,7 +194,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {AccountData} data 
      */
     setAccount(data) {
-        let message = {
+        var message = {
             action: SET_ACCOUNT_DATA,
             data
         };
@@ -202,7 +202,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         this.postMessage(message);
     }
     init() {
-        let message = {
+        var message = {
             action: INIT,
             tokenType: this.props.type,
             referrer: window.location.toString()
@@ -211,7 +211,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         this.postMessage(message);
     }
     getToken() {
-        let message = {
+        var message = {
             action: GET_TOKEN
         };
         this.logAction(GET_TOKEN);
@@ -231,7 +231,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {number} waitForResponseTimeout 
      */
     enable3DS(waitForResponse, waitForResponseTimeout) {
-        let message = {
+        var message = {
             action: ENABLE3DS,
             data: {
                 waitForResponse,
@@ -247,7 +247,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {string} value 
      */
     update3DS(fieldName, value) {
-        let message = {
+        var message = {
             action: UPDATE3DS,
             data: {
                 fieldName,
@@ -262,7 +262,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {string} issuer 
      */
     updateIssuer(issuer) {
-        let message = {
+        var message = {
             action: UPDATE_ISSUER,
             issuer: issuer || 'unknown'
         };
@@ -274,7 +274,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {string} data 
      */
     setPlaceholder(data) {
-        let message = {
+        var message = {
             action: SET_PLACEHOLDER,
             data
         };
@@ -286,7 +286,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {string} formatChar 
      */
     enableAutoFormat(formatChar) {
-        let message = {
+        var message = {
             action: FORMAT,
             data: {
                 formatChar
@@ -296,7 +296,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         this.postMessage(message);
     }
     enableLogging() {
-        let message = {
+        var message = {
             action: ENABLE_LOGGING
         };
         this.logAction(ENABLE_LOGGING);
@@ -307,7 +307,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
      * @param {string} formId - The ID attribute of the form to trigger submit on
      */
     enableAutoSubmit(formId) {
-        let message = {
+        var message = {
             action: ENABLE_AUTO_SUBMIT,
             data: {
                 formId
@@ -317,7 +317,7 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
         this.postMessage(message);
     }
     setStyle(data) {
-        let message = {
+        var message = {
             action: STYLE,
             data
         };
@@ -326,14 +326,14 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
     }
     //----------------------Public Actions
     focusIfield() {
-        let message = {
+        var message = {
             action: FOCUS
         }
         this.logAction(FOCUS);
         this.postMessage(message);
     }
     clearIfield() {
-        let message = {
+        var message = {
             action: CLEAR_DATA
         };
         this.logAction(CLEAR_DATA);
@@ -361,8 +361,8 @@ if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
     }
 
     validateProps() {
-        let props = this.props;
-        let accountProps = props.account ?
+        var props = this.props;
+        var accountProps = props.account ?
             props.account.xKey ?
                 props.account.xSoftwareName ?
                     props.account.xSoftwareVersion ? false :

@@ -25,7 +25,7 @@ export default class App extends React.Component {
             autoFormat: true,
             autoFormatSeparator: ' ',
             autoSubmit: false,
-                        iFieldstyle: {
+            iFieldstyle: {
 
             },
             iFrameStyle: {
@@ -89,7 +89,8 @@ export default class App extends React.Component {
     onLoad = () => {
         console.log("Iframe loaded");
     }
-    onUpdate = (data) => {        
+    onUpdate = (data) => {
+        // console.log("Iframe Updated", data);
         if (data.issuer)
             this.setState({ issuer: data.issuer });
     }
@@ -101,7 +102,7 @@ export default class App extends React.Component {
     }
     onError = (data) => {
         console.error("IFrame errored", data);
-            }
+    }
     getToken = () => {
         this.cvvRef.current.getToken();
     }
