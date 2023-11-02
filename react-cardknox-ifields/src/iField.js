@@ -75,7 +75,7 @@ export default class IField extends React.Component {
      * @param {MessageEvent} e 
      */
     onMessage = (e) => {
-        var data = e.data;
+        const data = e.data;
         if (e.source !== this.iFrameRef.current.contentWindow)
             return;
         switch (data.action) {
@@ -107,7 +107,7 @@ export default class IField extends React.Component {
         }
     }
     onLoad = () => {
-        var props = this.props;
+        const props = this.props;
         this.setAccount(props.account);
         if (props.threeDS.enable3DS) {
             this.enable3DS(props.threeDS.waitForResponse, props.threeDS.waitForResponseTimeout);
@@ -186,7 +186,7 @@ export default class IField extends React.Component {
     //----------------------/
     //----------------------Actions
     ping() {
-        var message = {
+        const message = {
             action: PING
         };
         this.logAction(PING);
@@ -197,7 +197,7 @@ export default class IField extends React.Component {
      * @param {AccountData} data 
      */
     setAccount(data) {
-        var message = {
+        const message = {
             action: SET_ACCOUNT_DATA,
             data
         };
@@ -205,7 +205,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     init() {
-        var message = {
+        const message = {
             action: INIT,
             tokenType: this.props.type,
             referrer: window.location.toString()
@@ -214,7 +214,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     getToken() {
-        var message = {
+        const message = {
             action: GET_TOKEN
         };
         this.logAction(GET_TOKEN);
@@ -235,7 +235,7 @@ export default class IField extends React.Component {
      * @param {number} waitForResponseTimeout 
      */
     enable3DS(waitForResponse, waitForResponseTimeout) {
-        var message = {
+        const message = {
             action: ENABLE3DS,
             data: {
                 waitForResponse,
@@ -251,7 +251,7 @@ export default class IField extends React.Component {
      * @param {string} value 
      */
     update3DS(fieldName, value) {
-        var message = {
+        const message = {
             action: UPDATE3DS,
             data: {
                 fieldName,
@@ -266,7 +266,7 @@ export default class IField extends React.Component {
      * @param {string} issuer 
      */
     updateIssuer(issuer) {
-        var message = {
+        const message = {
             action: UPDATE_ISSUER,
             issuer: issuer || 'unknown'
         };
@@ -278,7 +278,7 @@ export default class IField extends React.Component {
      * @param {string} data 
      */
     setPlaceholder(data) {
-        var message = {
+        const message = {
             action: SET_PLACEHOLDER,
             data
         };
@@ -290,7 +290,7 @@ export default class IField extends React.Component {
      * @param {string} formatChar 
      */
     enableAutoFormat(formatChar) {
-        var message = {
+        const message = {
             action: FORMAT,
             data: {
                 formatChar
@@ -300,7 +300,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     enableLogging() {
-        var message = {
+        const message = {
             action: ENABLE_LOGGING
         };
         this.logAction(ENABLE_LOGGING);
@@ -311,7 +311,7 @@ export default class IField extends React.Component {
      * @param {string} formId - The ID attribute of the form to trigger submit on
      */
     enableAutoSubmit(formId) {
-        var message = {
+        const message = {
             action: ENABLE_AUTO_SUBMIT,
             data: {
                 formId
@@ -321,7 +321,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     setStyle(data) {
-        var message = {
+        const message = {
             action: STYLE,
             data
         };
@@ -330,14 +330,14 @@ export default class IField extends React.Component {
     }
     //----------------------Public Actions
     focusIfield() {
-        var message = {
+        const message = {
             action: FOCUS
         }
         this.logAction(FOCUS);
         this.postMessage(message);
     }
     clearIfield() {
-        var message = {
+        const message = {
             action: CLEAR_DATA
         };
         this.logAction(CLEAR_DATA);
@@ -365,8 +365,8 @@ export default class IField extends React.Component {
     }
 
     validateProps() {
-        var props = this.props;
-        var accountProps = props.account ?
+        const props = this.props;
+        const accountProps = props.account ?
             props.account.xKey ?
                 props.account.xSoftwareName ?
                     props.account.xSoftwareVersion ? false :

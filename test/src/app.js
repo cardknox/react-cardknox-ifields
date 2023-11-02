@@ -90,7 +90,6 @@ export default class App extends React.Component {
         console.log("Iframe loaded");
     }
     onUpdate = (data) => {
-        // console.log("Iframe Updated", data);
         if (data.issuer)
             this.setState({ issuer: data.issuer });
     }
