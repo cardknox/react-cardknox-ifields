@@ -136,7 +136,6 @@ export default class IField extends React.Component {
      * @param {{data: TokenData}} param0 
      */
     onToken({ data }) {
-        clearTimeout(this.state.getTokenTimeoutId)
         const { getTokenTimeoutIds } = this.state;
         this.setState({getTokenTimeoutIds: []});
         getTokenTimeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
