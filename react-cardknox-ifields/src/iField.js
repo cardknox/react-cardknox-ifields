@@ -16,7 +16,8 @@ export default class IField extends React.Component {
             ifieldDataCache: {
                 length: 0,
                 issuer: ''
-            }
+            },
+            getTokenTimeoutIds: []
         };
     }
     render() {
@@ -135,6 +136,9 @@ export default class IField extends React.Component {
      * @param {{data: TokenData}} param0 
      */
     onToken({ data }) {
+        const { getTokenTimeoutIds } = this.state;
+        this.setState({getTokenTimeoutIds: []});
+        getTokenTimeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
         if (data.result === ERROR) {
             this.log("Token Error: " + data.errorMessage);
             if (this.props.onError)
@@ -215,6 +219,15 @@ export default class IField extends React.Component {
         };
         this.logAction(GET_TOKEN);
         this.postMessage(message);
+        const getTokenTimeoutId = setTimeout(() => {
+            this.onToken({
+                data: {
+                    result: ERROR,
+                    errorMessage: "Transaction timed out."
+                }
+            })
+        }, 60000);
+        this.setState({getTokenTimeoutIds: [...this.state.getTokenTimeoutIds, getTokenTimeoutId]});
     }
     /**
      * 
