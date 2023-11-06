@@ -84,8 +84,8 @@ export default class IField extends React.Component {
             this.setPlaceholder(options.placeholder);
         }
 
-        if (options.iFieldStyle !== prevOptions.iFieldStyle) {
-            this.setStyle(options.iFieldStyle);
+        if (options.iFieldstyle !== prevOptions.iFieldstyle) {
+            this.setStyle(options.iFieldstyle);
         }
     }
     //----------------------Events
@@ -145,8 +145,8 @@ export default class IField extends React.Component {
             this.enableAutoFormat(props.options.autoFormatSeparator);
         if (props.options.autoSubmit)
             this.enableAutoSubmit(props.options.autoSubmitFormId);
-        if (props.options.iFieldStyle)
-            this.setStyle(props.options.iFieldStyle);
+        if (props.options.iFieldstyle)
+            this.setStyle(props.options.iFieldstyle);
         if (props.onLoad)
             props.onLoad();
     }
@@ -420,7 +420,7 @@ IField.propTypes = {
         enableLogging: PropTypes.bool,
         placeholder: PropTypes.string,
         iFrameStyle: PropTypes.object,
-        iFieldStyle: PropTypes.object
+        iFieldstyle: PropTypes.object
     }),
     account: PropTypes.shape({
         xKey: PropTypes.string.isRequired,
