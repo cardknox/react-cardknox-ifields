@@ -10,6 +10,7 @@ import {
 export default class IField extends React.Component {
     constructor(props) {
         super(props);
+        this.validateProps();
         this.iFrameRef = React.createRef();
         this.state = {
             iFrameLoaded: false,
@@ -264,6 +265,24 @@ export default class IField extends React.Component {
         this.logAction(ENABLE3DS);
         this.postMessage(message);
     }
+
+    validateProps() {
+        const props = this.props;
+        const accountProps = props.account ?
+            props.account.xKey ?
+                props.account.xSoftwareName ?
+                    props.account.xSoftwareVersion ? false :
+                        'xSoftwareVersion' :
+                    'xSoftwareName' :
+                'xKey' :
+            'account';
+        if (accountProps) {
+            this.error("Missing " + accountProps)
+        }
+        if (!props.type)
+            this.error("Missing props (type)")
+    }
+
     /**
      * 
      * @param {string} fieldName - The field to update
