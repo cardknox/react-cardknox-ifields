@@ -464,8 +464,7 @@ IField.defaultProps = {
         autoFormatSeparator: AUTO_FORMAT_DEFAULT_SEPARATOR
     },
     account: {},
-    threeDS: {
-    }
+    threeDS: {}
 };
 
 /**
