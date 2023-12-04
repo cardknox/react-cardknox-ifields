@@ -39,9 +39,6 @@ export default class IField extends React.Component {
         window.removeEventListener('message', this.onMessage);
     }
     componentDidUpdate(prevProps) {
-        // if (this.props.type === CARD_TYPE) {
-        //     const { threeDS } = this.props;
-        //     
         const { props } = this;
         const { threeDS, options } = props;
         const { threeDS: prevThreeDS, options: prevOptions } = prevProps;
