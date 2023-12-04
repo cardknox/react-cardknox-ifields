@@ -8,11 +8,11 @@
     "react": "^18.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
     "build": "webpack"
   },
   "author": {
+    "name": "Cardknox Development Team",
     "email": "info@cardknox.com"
   },
   "bugs": {
