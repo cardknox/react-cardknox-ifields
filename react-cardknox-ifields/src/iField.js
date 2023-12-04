@@ -1,5 +1,6 @@
 
 import React from "react";
+import PropTypes from 'prop-types';
 import {
     LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
     CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, UPDATE3DS, AMOUNT,
@@ -38,36 +39,55 @@ export default class IField extends React.Component {
         window.removeEventListener('message', this.onMessage);
     }
     componentDidUpdate(prevProps) {
-        if (this.props.account !== prevProps.account)
-            this.setAccount(this.props.account);
-        if (this.props.threeDS.enable3DS) {
-            if (this.props.threeDS.enable3DS !== prevProps.threeDS.enable3DS)
-                this.enable3DS(this.props.threeDS.waitForResponse, this.props.threeDS.waitForResponseTimeout);
-            if (this.props.threeDS.amount !== prevProps.threeDS.amount)
-                this.update3DS(AMOUNT, this.props.threeDS.amount);
-            if (this.props.threeDS.month !== prevProps.threeDS.month)
-                this.update3DS(MONTH, this.props.threeDS.month);
-            if (this.props.threeDS.year !== prevProps.threeDS.year)
-                this.update3DS(YEAR, this.props.threeDS.year);
+        const { props } = this;
+        const { threeDS, options } = props;
+        const { threeDS: prevThreeDS, options: prevOptions } = prevProps;
+
+        if (props.account !== prevProps.account) {
+            this.setAccount(props.account);
         }
-        if (this.props.issuer !== prevProps.issuer)
-            this.updateIssuer(this.props.issuer);
-        if (this.props.options.autoFormat) {
-            if (this.props.options.autoFormat !== prevProps.options.autoFormat ||
-                this.props.options.autoFormatSeparator !== prevProps.options.autoFormatSeparator)
-                this.enableAutoFormat(this.props.options.autoFormatSeparator);
+
+        if (threeDS.enable3DS !== prevThreeDS.enable3DS) {
+            this.enable3DS(threeDS.waitForResponse, threeDS.waitForResponseTimeout);
         }
-        if (this.props.options.autoSubmit) {
-            if (this.props.options.autoSubmit !== prevProps.options.autoSubmit ||
-                this.props.options.autoSubmitFormId !== prevProps.options.autoSubmitFormId)
-                this.enableAutoSubmit(this.props.options.autoSubmitFormId);
+
+        if (threeDS.amount !== prevThreeDS.amount) {
+            this.update3DS(AMOUNT, threeDS.amount);
         }
-        if (this.props.options.enableLogging !== prevProps.options.enableLogging)
+
+        if (threeDS.month !== prevThreeDS.month) {
+            this.update3DS(MONTH, threeDS.month);
+        }
+
+        if (threeDS.year !== prevThreeDS.year) {
+            this.update3DS(YEAR, threeDS.year);
+        }
+
+        if (props.issuer !== prevProps.issuer) {
+            this.updateIssuer(props.issuer);
+        }
+
+        if (options.autoFormat !== prevOptions.autoFormat ||
+                options.autoFormatSeparator !== prevOptions.autoFormatSeparator) {
+            this.enableAutoFormat(options.autoFormatSeparator);
+        }
+
+        if (options.autoSubmit !== prevOptions.autoSubmit ||
+                options.autoSubmitFormId !== prevOptions.autoSubmitFormId) {
+            this.enableAutoSubmit(options.autoSubmitFormId);
+        }
+
+        if (options.enableLogging !== prevOptions.enableLogging) {
             this.enableLogging();
-        if (this.props.options.placeholder !== prevProps.options.placeholder)
-            this.setPlaceholder(this.props.options.placeholder);
-        if (this.props.options.iFieldstyle !== prevProps.options.iFieldstyle)
-            this.setStyle(this.props.options.iFieldstyle);
+        }
+
+        if (options.placeholder !== prevOptions.placeholder) {
+            this.setPlaceholder(options.placeholder);
+        }
+
+        if (options.iFieldstyle !== prevOptions.iFieldstyle) {
+            this.setStyle(options.iFieldstyle);
+        }
     }
     //----------------------Events
     /**
@@ -75,7 +95,7 @@ export default class IField extends React.Component {
      * @param {MessageEvent} e 
      */
     onMessage = (e) => {
-        var data = e.data;
+        const data = e.data;
         if (e.source !== this.iFrameRef.current.contentWindow)
             return;
         switch (data.action) {
@@ -107,7 +127,7 @@ export default class IField extends React.Component {
         }
     }
     onLoad = () => {
-        var props = this.props;
+        const props = this.props;
         this.setAccount(props.account);
         if (props.threeDS.enable3DS) {
             this.enable3DS(props.threeDS.waitForResponse, props.threeDS.waitForResponseTimeout);
@@ -176,7 +196,7 @@ export default class IField extends React.Component {
         //call first before submit is triggered
         if (this.props.onSubmit)
             this.props.onSubmit();
-        if (data && data.formId) {
+        if (data?.formId) {
             document.getElementById(data.formId).dispatchEvent(new Event("submit", {
                 bubbles: true,
                 cancelable: true
@@ -186,7 +206,7 @@ export default class IField extends React.Component {
     //----------------------/
     //----------------------Actions
     ping() {
-        var message = {
+        const message = {
             action: PING
         };
         this.logAction(PING);
@@ -197,7 +217,7 @@ export default class IField extends React.Component {
      * @param {AccountData} data 
      */
     setAccount(data) {
-        var message = {
+        const message = {
             action: SET_ACCOUNT_DATA,
             data
         };
@@ -205,7 +225,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     init() {
-        var message = {
+        const message = {
             action: INIT,
             tokenType: this.props.type,
             referrer: window.location.toString()
@@ -214,7 +234,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     getToken() {
-        var message = {
+        const message = {
             action: GET_TOKEN
         };
         this.logAction(GET_TOKEN);
@@ -235,7 +255,7 @@ export default class IField extends React.Component {
      * @param {number} waitForResponseTimeout 
      */
     enable3DS(waitForResponse, waitForResponseTimeout) {
-        var message = {
+        const message = {
             action: ENABLE3DS,
             data: {
                 waitForResponse,
@@ -245,13 +265,31 @@ export default class IField extends React.Component {
         this.logAction(ENABLE3DS);
         this.postMessage(message);
     }
+
+    validateProps() {
+        const props = this.props;
+        const accountProps = props.account ?
+            props.account.xKey ?
+                props.account.xSoftwareName ?
+                    props.account.xSoftwareVersion ? false :
+                        'xSoftwareVersion' :
+                    'xSoftwareName' :
+                'xKey' :
+            'account';
+        if (accountProps) {
+            this.error("Missing " + accountProps)
+        }
+        if (!props.type)
+            this.error("Missing props (type)")
+    }
+
     /**
      * 
      * @param {string} fieldName - The field to update
      * @param {string} value 
      */
     update3DS(fieldName, value) {
-        var message = {
+        const message = {
             action: UPDATE3DS,
             data: {
                 fieldName,
@@ -266,7 +304,7 @@ export default class IField extends React.Component {
      * @param {string} issuer 
      */
     updateIssuer(issuer) {
-        var message = {
+        const message = {
             action: UPDATE_ISSUER,
             issuer: issuer || 'unknown'
         };
@@ -278,7 +316,7 @@ export default class IField extends React.Component {
      * @param {string} data 
      */
     setPlaceholder(data) {
-        var message = {
+        const message = {
             action: SET_PLACEHOLDER,
             data
         };
@@ -290,7 +328,7 @@ export default class IField extends React.Component {
      * @param {string} formatChar 
      */
     enableAutoFormat(formatChar) {
-        var message = {
+        const message = {
             action: FORMAT,
             data: {
                 formatChar
@@ -300,7 +338,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     enableLogging() {
-        var message = {
+        const message = {
             action: ENABLE_LOGGING
         };
         this.logAction(ENABLE_LOGGING);
@@ -311,7 +349,7 @@ export default class IField extends React.Component {
      * @param {string} formId - The ID attribute of the form to trigger submit on
      */
     enableAutoSubmit(formId) {
-        var message = {
+        const message = {
             action: ENABLE_AUTO_SUBMIT,
             data: {
                 formId
@@ -321,7 +359,7 @@ export default class IField extends React.Component {
         this.postMessage(message);
     }
     setStyle(data) {
-        var message = {
+        const message = {
             action: STYLE,
             data
         };
@@ -330,14 +368,14 @@ export default class IField extends React.Component {
     }
     //----------------------Public Actions
     focusIfield() {
-        var message = {
+        const message = {
             action: FOCUS
         }
         this.logAction(FOCUS);
         this.postMessage(message);
     }
     clearIfield() {
-        var message = {
+        const message = {
             action: CLEAR_DATA
         };
         this.logAction(CLEAR_DATA);
@@ -364,22 +402,7 @@ export default class IField extends React.Component {
                 || (this.props.type === CVV_TYPE && this.props.issuer !== this.state.ifieldDataCache.issuer))
     }
 
-    validateProps() {
-        var props = this.props;
-        var accountProps = props.account ?
-            props.account.xKey ?
-                props.account.xSoftwareName ?
-                    props.account.xSoftwareVersion ? false :
-                        'xSoftwareVersion' :
-                    'xSoftwareName' :
-                'xKey' :
-            'account';
-        if (accountProps) {
-            this.error("Missing " + accountProps)
-        }
-        if (!props.type)
-            this.error("Missing props (type)")
-    }
+
     /**
      * 
      * @param {string} message
@@ -404,7 +427,40 @@ export default class IField extends React.Component {
         console.error(`IField ${this.props.type}: ${message}`);
     }
     //---------------------------/
-}
+};
+
+IField.propTypes = {
+    type: PropTypes.string.isRequired,
+    options: PropTypes.shape({
+        autoFormat: PropTypes.bool,
+        autoFormatSeparator: PropTypes.string,
+        autoSubmit: PropTypes.bool,
+        autoSubmitFormId: PropTypes.string,
+        enableLogging: PropTypes.bool,
+        placeholder: PropTypes.string,
+        iFrameStyle: PropTypes.object,
+        iFieldstyle: PropTypes.object
+    }),
+    account: PropTypes.shape({
+        xKey: PropTypes.string.isRequired,
+        xSoftwareName: PropTypes.string.isRequired,
+        xSoftwareVersion: PropTypes.string.isRequired
+    }),
+    threeDS: PropTypes.shape({
+        enable3DS: PropTypes.bool,
+        waitForResponse: PropTypes.bool,
+        waitForResponseTimeout: PropTypes.number,
+        amount: PropTypes.string,
+        month: PropTypes.string,
+        year: PropTypes.string
+    }),
+    issuer: PropTypes.string,
+    onLoad: PropTypes.func,
+    onToken: PropTypes.func,
+    onUpdate: PropTypes.func,
+    onSubmit: PropTypes.func,
+    onError: PropTypes.func
+};
 
 IField.defaultProps = {
     options: {
