@@ -264,28 +264,20 @@ export default function AppForm() {
           <div className='column'>
             <section className='box result-box'>
               <div className='field'>
-                <label className='label'>
-                  Card Token
+                <p className='label'>Card Token</p>
                   <p className='token-field'>{cardToken}</p>
-                </label>
               </div>
               <div className='field'>
-                <label className='label'>
-                  CVV Token
+                <p className='label'>CVV Token</p>
                   <p className='token-field'>{cvvToken}</p>
-                </label>
               </div>
               <div className='field'>
-                <label className='label'>
-                  Gateway Response
+                <p className='label'>Gateway Response</p>
                   <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
-                </label>
               </div>
               <div className='field'>
-                <label className='label'>
-                  3DS Response
-                  <p className='token-field'>{JSON.stringify(gateway3dsResponse)}</p>
-                </label>
+                <p className='label'>3DS Response</p>
+                <p className='token-field'>{JSON.stringify(gateway3dsResponse)}</p>
               </div>
             </section>
           </div>
