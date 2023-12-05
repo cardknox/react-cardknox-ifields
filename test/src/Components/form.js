@@ -19,7 +19,7 @@ export default function AppForm() {
   const [expMonth, setExpMonth] = useState(new Date().getMonth());
   const [expYear, setExpYear] = useState(new Date().getFullYear());
   const [gatewayResponse, setGatewayResponse] = useState('');
-  const [gateway3dsReseponse, setGateway3dsResponse] = useState('');
+  const [gateway3dsResponse, setGateway3dsResponse] = useState('');
   const cardRef = useRef();
   const cvvRef = useRef();
   const getCardToken = () => {
@@ -133,97 +133,125 @@ export default function AppForm() {
           <div className='column'>
             <section className='box card-box'>
               <div className="field">
-                <label className="label">Amount</label>
-                <div className="control">
-                  <input className="input" type="text" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
-                </div>
+                <label className="label">
+                  Amount
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Enter amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                  </div>
+                </label>
               </div>
               <div className="field is-grouped">
                 <div className='field'>
-                  <label className="label">First Name</label>
-                  <div className="control">
-                    <input className="input" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                  </div>
+                  <label className="label">
+                    First Name
+                    <div className="control">
+                      <input className="input" type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                    </div>
+                  </label>
                 </div>
                 <div className='field'>
-                  <label className="label">Last Name</label>
-                  <div className="control">
-                    <input className="input" type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                  </div>
+                  <label className="label">
+                    Last Name
+                    <div className="control">
+                      <input className="input" type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                    </div>
+                  </label>
                 </div>
               </div>
               <div className="field">
-                <label className="label">Address</label>
-                <div className="control">
-                  <input className="input" type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
-                </div>
+                <label className="label">
+                  Address
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+                  </div>
+                </label>
               </div>
               <div className="field is-grouped">
                 <div className='field is-expanded'>
-                  <label className="label">City</label>
-                  <div className="control">
-                    <input className="input" type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
-                  </div>
+                  <label className="label">
+                    City
+                    <div className="control">
+                      <input className="input" type="text" placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} />
+                    </div>
+                  </label>
                 </div>
                 <div className='field smallWidth'>
-                  <label className="label">State</label>
-                  <div className="control">
-                    <input className="input" type="text" placeholder="State" value={addressState} onChange={(e) => setAddressState(e.target.value)} />
-                  </div>
+                  <label className="label">
+                    State
+                    <div className="control">
+                      <input className="input" type="text" placeholder="State" value={addressState} onChange={(e) => setAddressState(e.target.value)} />
+                    </div>
+                  </label>
                 </div>
                 <div className='field smallWidth'>
-                  <label className="label">Zip</label>
-                  <div className="control">
-                    <input className="input" type="text" placeholder="Zip" value={zip} onChange={(e) => setZip(e.target.value)} />
-                  </div>
+                  <label className="label">
+                    Zip
+                    <div className="control">
+                      <input className="input" type="text" placeholder="Zip" value={zip} onChange={(e) => setZip(e.target.value)} />
+                    </div>
+                  </label>
                 </div>
               </div>
               <div className="field">
-                <label className="label">Mobile</label>
-                <div className="control">
-                  <input className="input" type="text" placeholder="Mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-                </div>
+                <label className="label">
+                  Mobile
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Mobile" value={mobile} onChange={(e) => setMobile(e.target.value)} />
+                  </div>
+                </label>
               </div>
               <div className="field">
-                <label className="label">Email</label>
-                <div className="control">
-                  <input className="input" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
+                <label className="label">
+                  Email
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </div>
+                </label>
               </div>
               <div className='field'>
-                <label className="label">Card Number</label>
-                <div className="control">
-                  <WrappedIfield ifieldType={CARD_TYPE} onIssuer={setIssuer} onToken={onCardToken} handle3DSResults={handle3DSResults} ref={cardRef} />
-                </div>
+                <label className="label">
+                  Card Number
+                  <div className="control">
+                    <WrappedIfield ifieldType={CARD_TYPE} onIssuer={setIssuer} onToken={onCardToken} handle3DSResults={handle3DSResults} ref={cardRef} />
+                  </div>
+                </label>
               </div>
               <button className="button is-info is-rounded is-small" onClick={focusCard}>Focus</button>
               <button className="button is-info is-rounded is-small" onClick={clearCard}>Clear</button>
               <button className="button is-info is-rounded is-small" onClick={getCardToken}>Submit</button>
               <div className="field is-grouped mt-3">
                 <div className='field'>
-                  <label className="label">Month</label>
-                  <div className="control">
-                    <div className="select">
-                      <select value={expMonth} onChange={(e) => setExpMonth(e.target.value)}>
-                        {[...Array(12).keys()].map((i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
-                      </select>
+                  <label className="label">
+                    Month
+                    <div className="control">
+                      <div className="select">
+                        <select value={expMonth} onChange={(e) => setExpMonth(e.target.value)}>
+                          {[...Array(12).keys()].map((i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
                 <div className='field'>
-                  <label className="label">Year</label>
-                  <div className="control">
-                    <div className="select">
-                      <select value={expYear} onChange={(e) => setExpYear(e.target.value)}>
-                        {[...Array(10).keys()].map((i) => <option key={i + 1} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>)}
-                      </select>
+                  <label className="label">
+                    Year
+                    <div className="control">
+                      <div className="select">
+                        <select value={expYear} onChange={(e) => setExpYear(e.target.value)}>
+                          {[...Array(10).keys()].map((i) => <option key={i + 1} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>)}
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
               </div>
               <div className='field'>
-                <label className="label">CVV</label>
-                <WrappedIfield ifieldType={CVV_TYPE} issuer={issuer} onToken={onCvvToken} ref={cvvRef} />
+                <label className="label">
+                  CVV
+                  <div className="control">
+                    <WrappedIfield ifieldType={CVV_TYPE} issuer={issuer} onToken={onCvvToken} ref={cvvRef} />
+                  </div>
+                </label>
               </div>
               <button className="button is-info is-rounded is-small" onClick={focusCvv}>Focus</button>
               <button className="button is-info is-rounded is-small" onClick={clearCvv}>Clear</button>
@@ -236,20 +264,28 @@ export default function AppForm() {
           <div className='column'>
             <section className='box result-box'>
               <div className='field'>
-                <label className='label'>Card Token</label>
-                <p className='token-field'>{cardToken}</p>
+                <label className='label'>
+                  Card Token
+                  <p className='token-field'>{cardToken}</p>
+                </label>
               </div>
               <div className='field'>
-                <label className='label'>CVV Token</label>
-                <p className='token-field'>{cvvToken}</p>
+                <label className='label'>
+                  CVV Token
+                  <p className='token-field'>{cvvToken}</p>
+                </label>
               </div>
               <div className='field'>
-                <label className='label'>Gateway Response</label>
-                <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
+                <label className='label'>
+                  Gateway Response
+                  <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
+                </label>
               </div>
               <div className='field'>
-                <label className='label'>3DS Response</label>
-                <p className='token-field'>{JSON.stringify(gateway3dsReseponse)}</p>
+                <label className='label'>
+                  3DS Response
+                  <p className='token-field'>{JSON.stringify(gateway3dsResponse)}</p>
+                </label>
               </div>
             </section>
           </div>
