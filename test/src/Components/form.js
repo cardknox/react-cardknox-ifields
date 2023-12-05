@@ -209,49 +209,41 @@ export default function AppForm() {
                 </label>
               </div>
               <div className='field'>
-                <label className="label">
-                  Card Number
-                  <div className="control">
-                    <WrappedIfield ifieldType={CARD_TYPE} onIssuer={setIssuer} onToken={onCardToken} handle3DSResults={handle3DSResults} ref={cardRef} />
-                  </div>
-                </label>
+                <p className="label">Card Number</p>
+                <div className="control">
+                  <WrappedIfield ifieldType={CARD_TYPE} onIssuer={setIssuer} onToken={onCardToken} handle3DSResults={handle3DSResults} ref={cardRef} />
+                </div>
               </div>
               <button className="button is-info is-rounded is-small" onClick={focusCard}>Focus</button>
               <button className="button is-info is-rounded is-small" onClick={clearCard}>Clear</button>
               <button className="button is-info is-rounded is-small" onClick={getCardToken}>Submit</button>
               <div className="field is-grouped mt-3">
                 <div className='field'>
-                  <label className="label">
-                    Month
-                    <div className="control">
-                      <div className="select">
-                        <select value={expMonth} onChange={(e) => setExpMonth(e.target.value)}>
-                          {[...Array(12).keys()].map((i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
-                        </select>
-                      </div>
+                  <p className="label">Month</p>
+                  <div className="control">
+                    <div className="select">
+                      <select value={expMonth} onChange={(e) => setExpMonth(e.target.value)}>
+                        {[...Array(12).keys()].map((i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
+                      </select>
                     </div>
-                  </label>
+                  </div>
                 </div>
                 <div className='field'>
-                  <label className="label">
-                    Year
-                    <div className="control">
-                      <div className="select">
-                        <select value={expYear} onChange={(e) => setExpYear(e.target.value)}>
-                          {[...Array(10).keys()].map((i) => <option key={i + 1} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>)}
-                        </select>
-                      </div>
+                  <p className="label">Year</p>
+                  <div className="control">
+                    <div className="select">
+                      <select value={expYear} onChange={(e) => setExpYear(e.target.value)}>
+                        {[...Array(10).keys()].map((i) => <option key={i + 1} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>)}
+                      </select>
                     </div>
-                  </label>
+                  </div>
                 </div>
               </div>
               <div className='field'>
-                <label className="label">
-                  CVV
-                  <div className="control">
-                    <WrappedIfield ifieldType={CVV_TYPE} issuer={issuer} onToken={onCvvToken} ref={cvvRef} />
-                  </div>
-                </label>
+                <p className="label">CVV</p>
+                <div className="control">
+                  <WrappedIfield ifieldType={CVV_TYPE} issuer={issuer} onToken={onCvvToken} ref={cvvRef} />
+                </div>
               </div>
               <button className="button is-info is-rounded is-small" onClick={focusCvv}>Focus</button>
               <button className="button is-info is-rounded is-small" onClick={clearCvv}>Clear</button>
@@ -265,15 +257,15 @@ export default function AppForm() {
             <section className='box result-box'>
               <div className='field'>
                 <p className='label'>Card Token</p>
-                  <p className='token-field'>{cardToken}</p>
+                <p className='token-field'>{cardToken}</p>
               </div>
               <div className='field'>
                 <p className='label'>CVV Token</p>
-                  <p className='token-field'>{cvvToken}</p>
+                <p className='token-field'>{cvvToken}</p>
               </div>
               <div className='field'>
                 <p className='label'>Gateway Response</p>
-                  <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
+                <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
               </div>
               <div className='field'>
                 <p className='label'>3DS Response</p>
