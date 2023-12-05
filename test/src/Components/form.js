@@ -273,11 +273,11 @@ export default function AppForm() {
               </div>
               <div className='field'>
                 <p className='label'>Gateway Response</p>
-                  <p className='token-field'>{JSON.stringify(gatewayResponse)}</p>
+                  <p className='token-field'>{gatewayResponse}</p>
               </div>
               <div className='field'>
                 <p className='label'>3DS Response</p>
-                <p className='token-field'>{JSON.stringify(gateway3dsResponse)}</p>
+                <p className='token-field'>{gateway3dsResponse}</p>
               </div>
             </section>
           </div>

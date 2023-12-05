@@ -42,7 +42,9 @@ const WrappedIfield = React.forwardRef((props, ref) => {
       "padding-bottom": "calc(0.375em - 1px)",
       "padding-left": "calc(0.625em - 1px)",
       "padding-right": "calc(0.625em - 1px)",
-      "padding-top": "calc(0.375em - 1px)"
+      "padding-top": "calc(0.375em - 1px)",
+      outline: "none"
+      
     }
   };
   const onLoad = () => {
