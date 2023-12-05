@@ -25,6 +25,7 @@ export default class IField extends React.Component {
         return (
             <iframe
                 style={this.props.options.iFrameStyle}
+                className={this.props.className}
                 src={IFIELD_ORIGIN + '/ifields/' + IFIELDS_VERSION + '/ifield.htm'}
                 title={this.props.type}
                 ref={this.iFrameRef}>
@@ -430,6 +431,7 @@ export default class IField extends React.Component {
 };
 
 IField.propTypes = {
+    className: PropTypes.string,
     type: PropTypes.string.isRequired,
     options: PropTypes.shape({
         autoFormat: PropTypes.bool,
