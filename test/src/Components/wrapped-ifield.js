@@ -1,5 +1,6 @@
-import IField, { CARD_TYPE, THREEDS_ENVIRONMENT } from '@cardknox/react-ifields';
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import IField, { CARD_TYPE, CVV_TYPE, ACH_TYPE, THREEDS_ENVIRONMENT } from '@cardknox/react-ifields';
+import React, { useImperativeHandle, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const WrappedIfield = React.forwardRef((props, ref) => {
   const internalRef = useRef();
@@ -14,13 +15,13 @@ const WrappedIfield = React.forwardRef((props, ref) => {
       internalRef.current.clearIfield();
     }
   }), []);
-  
+
   const { ifieldType, issuer, onIssuer, onToken, onError, handle3DSResults } = props;
-  const [account] = useState({
+  const account = {
     xKey: "",
     xSoftwareName: "react-cardknox-ifields",
     xSoftwareVersion: "1.0.0"
-  });
+  };
   const options = {
     placeholder: ifieldType === CARD_TYPE ? 'Card Number' : 'CVV',
     enableLogging: false,
@@ -54,12 +55,12 @@ const WrappedIfield = React.forwardRef((props, ref) => {
   const onSubmit = (data) => {
     console.log("IFrame submitted", data);
   };
-  
-  const [threeds] = useState({
+
+  const threeds = {
     enable3DS: true,
     environment: THREEDS_ENVIRONMENT.Staging,
     handle3DSResults: handle3DSResults
-  });
+  };
   return (<IField
     type={ifieldType}
     account={account}
@@ -74,4 +75,12 @@ const WrappedIfield = React.forwardRef((props, ref) => {
     issuer={issuer}
     className='ifields' />);
 });
+WrappedIfield.propTypes = {
+  ifieldType: PropTypes.oneOf([CARD_TYPE, CVV_TYPE, ACH_TYPE]),
+  issuer: PropTypes.string,
+  onIssuer: PropTypes.func,
+  onToken: PropTypes.func,
+  onError: PropTypes.func,
+  handle3DSResults: PropTypes.func
+};
 export default WrappedIfield;
