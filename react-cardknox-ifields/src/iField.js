@@ -47,13 +47,13 @@ export default class IField extends React.Component {
         if (props.account !== prevProps.account) {
             this.setAccount(props.account);
         }
-        if (threeDS && threeDS.enable3DS) {
-            if (this.state.iFrameLoaded && (!prevThreeDS || !prevThreeDS.enable3DS
+        if (threeDS?.enable3DS) {
+            if (this.state.iFrameLoaded && (!prevThreeDS?.enable3DS
                 || threeDS.environment !== prevThreeDS.environment
                 || threeDS.handle3DSResults !== prevThreeDS.handle3DSResults)) {
                 this.enable3DS(threeDS.environment, threeDS.handle3DSResults);
             }
-        } else if (prevThreeDS && prevThreeDS.enable3DS) {
+        } else if (prevThreeDS?.enable3DS) {
             this.disable3DS();
         }
 
@@ -118,7 +118,7 @@ export default class IField extends React.Component {
         this.setAccount(props.account);
         if (this.props.type === CARD_TYPE) {
             const { threeDS } = props;
-            if (threeDS && threeDS.enable3DS && threeDS.environment) {
+            if (threeDS?.enable3DS && threeDS.environment) {
                 this.enable3DS(threeDS.environment, threeDS.handle3DSResults);
             } else {
                 this.disable3DS();
