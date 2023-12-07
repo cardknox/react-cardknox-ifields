@@ -20,11 +20,11 @@ export const SET_ACCOUNT_DATA = 'setAccountData';
 export const ENABLE_LOGGING = 'enableLogging';
 export const ENABLE_AUTO_SUBMIT = 'enableAutoSubmit';
 export const ENABLE3DS = 'enable3DS';
-export const UPDATE3DS = 'update3DS';
-export const AMOUNT = 'amount';
-export const MONTH = 'month';
-export const YEAR = 'year';
-export const WAIT_FOR_3DS_RESPONSE_TIMEOUT_DEFAULT = 2E4;
+export const DISABLE3DS = 'disable3DS';
 export const AUTO_FORMAT_DEFAULT_SEPARATOR = " ";
-export const IFIELDS_VERSION = '2.12.2201.2101';
+export const IFIELDS_VERSION = '2.15.2309.2601';
 export const IFIELD_ORIGIN = "https://cdn.cardknox.com";
+export const THREEDS_ENVIRONMENT = {
+  Production: 'production',
+  Staging: 'staging'
+};

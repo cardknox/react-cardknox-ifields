@@ -3,8 +3,8 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {
     LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
-    CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, UPDATE3DS, AMOUNT,
-    MONTH, YEAR, WAIT_FOR_3DS_RESPONSE_TIMEOUT_DEFAULT, AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE
+    CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, DISABLE3DS,
+    AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE
 } from "./constants";
 
 export default class IField extends React.Component {
@@ -25,6 +25,7 @@ export default class IField extends React.Component {
         return (
             <iframe
                 style={this.props.options.iFrameStyle}
+                className={this.props.className}
                 src={IFIELD_ORIGIN + '/ifields/' + IFIELDS_VERSION + '/ifield.htm'}
                 title={this.props.type}
                 ref={this.iFrameRef}>
@@ -46,21 +47,14 @@ export default class IField extends React.Component {
         if (props.account !== prevProps.account) {
             this.setAccount(props.account);
         }
-
-        if (threeDS.enable3DS !== prevThreeDS.enable3DS) {
-            this.enable3DS(threeDS.waitForResponse, threeDS.waitForResponseTimeout);
-        }
-
-        if (threeDS.amount !== prevThreeDS.amount) {
-            this.update3DS(AMOUNT, threeDS.amount);
-        }
-
-        if (threeDS.month !== prevThreeDS.month) {
-            this.update3DS(MONTH, threeDS.month);
-        }
-
-        if (threeDS.year !== prevThreeDS.year) {
-            this.update3DS(YEAR, threeDS.year);
+        if (threeDS?.enable3DS) {
+            if (this.state.iFrameLoaded && (!prevThreeDS?.enable3DS
+                || threeDS.environment !== prevThreeDS.environment
+                || threeDS.handle3DSResults !== prevThreeDS.handle3DSResults)) {
+                this.enable3DS(threeDS.environment, threeDS.handle3DSResults);
+            }
+        } else if (prevThreeDS?.enable3DS) {
+            this.disable3DS();
         }
 
         if (props.issuer !== prevProps.issuer) {
@@ -68,12 +62,12 @@ export default class IField extends React.Component {
         }
 
         if (options.autoFormat !== prevOptions.autoFormat ||
-                options.autoFormatSeparator !== prevOptions.autoFormatSeparator) {
+            options.autoFormatSeparator !== prevOptions.autoFormatSeparator) {
             this.enableAutoFormat(options.autoFormatSeparator);
         }
 
         if (options.autoSubmit !== prevOptions.autoSubmit ||
-                options.autoSubmitFormId !== prevOptions.autoSubmitFormId) {
+            options.autoSubmitFormId !== prevOptions.autoSubmitFormId) {
             this.enableAutoSubmit(options.autoSubmitFormId);
         }
 
@@ -118,22 +112,17 @@ export default class IField extends React.Component {
             default:
                 break;
         }
-        if (this.props.threeDS.enable3DS &&
-            data.eci &&
-            data.eci.length &&
-            this.props.type === CARD_TYPE) {
-            this.log("Message received: eci");
-            this.postMessage(data);
-        }
     }
     onLoad = () => {
         const props = this.props;
         this.setAccount(props.account);
-        if (props.threeDS.enable3DS) {
-            this.enable3DS(props.threeDS.waitForResponse, props.threeDS.waitForResponseTimeout);
-            this.update3DS(AMOUNT, props.threeDS.amount);
-            this.update3DS(MONTH, props.threeDS.month);
-            this.update3DS(YEAR, props.threeDS.year);
+        if (this.props.type === CARD_TYPE) {
+            const { threeDS } = props;
+            if (threeDS?.enable3DS && threeDS.environment) {
+                this.enable3DS(threeDS.environment, threeDS.handle3DSResults);
+            } else {
+                this.disable3DS();
+            }
         }
         this.init();
         if (props.issuer)
@@ -157,7 +146,7 @@ export default class IField extends React.Component {
      */
     onToken({ data }) {
         const { getTokenTimeoutIds } = this.state;
-        this.setState({getTokenTimeoutIds: []});
+        this.setState({ getTokenTimeoutIds: [] });
         getTokenTimeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
         if (data.result === ERROR) {
             this.log("Token Error: " + data.errorMessage);
@@ -247,23 +236,7 @@ export default class IField extends React.Component {
                 }
             })
         }, 60000);
-        this.setState({getTokenTimeoutIds: [...this.state.getTokenTimeoutIds, getTokenTimeoutId]});
-    }
-    /**
-     * 
-     * @param {boolean} waitForResponse 
-     * @param {number} waitForResponseTimeout 
-     */
-    enable3DS(waitForResponse, waitForResponseTimeout) {
-        const message = {
-            action: ENABLE3DS,
-            data: {
-                waitForResponse,
-                waitForResponseTimeout
-            }
-        };
-        this.logAction(ENABLE3DS);
-        this.postMessage(message);
+        this.setState({ getTokenTimeoutIds: [...this.state.getTokenTimeoutIds, getTokenTimeoutId] });
     }
 
     validateProps() {
@@ -285,20 +258,48 @@ export default class IField extends React.Component {
 
     /**
      * 
-     * @param {string} fieldName - The field to update
-     * @param {string} value 
+     * @param {string} environment 
+     * @param {Handle3DSResults} handle3DSResults 
      */
-    update3DS(fieldName, value) {
+    enable3DS(environment, handle3DSResults) {
+        if (handle3DSResults) {
+            if (typeof window.ck3DS !== 'undefined') {
+                ck3DS.configuration.onVerifyComplete = this.handle3DSResultsWrapper(handle3DSResults);
+                ck3DS.configuration.enableConsoleLogging = this.props.options.enableLogging;
+                if (!ck3DS.initialized)
+                    ck3DS.initialize3DS(environment);
+            }
+        }
         const message = {
-            action: UPDATE3DS,
+            action: ENABLE3DS,
             data: {
-                fieldName,
-                value
+                environment,
+                verificationEnabled: !!handle3DSResults
             }
         };
-        this.logAction(UPDATE3DS);
+        this.logAction(ENABLE3DS);
         this.postMessage(message);
     }
+
+    /**
+     * 
+     * @param {Handle3DSResults} handle3DSResults 
+     */
+    handle3DSResultsWrapper(handle3DSResults) {
+        return function (actionCode, xCavv, xEciFlag, xRefNum, xAuthenticateStatus, xSignatureVerification) {
+            handle3DSResults(actionCode, xCavv, xEciFlag, xRefNum, xAuthenticateStatus, xSignatureVerification, ck3DS.error);
+        }
+    }
+
+    disable3DS() {
+        const message = {
+            action: DISABLE3DS,
+            data: {}
+        };
+        this.logAction(DISABLE3DS);
+        this.postMessage(message);
+    }
+
     /**
      * 
      * @param {string} issuer 
@@ -430,6 +431,7 @@ export default class IField extends React.Component {
 };
 
 IField.propTypes = {
+    className: PropTypes.string,
     type: PropTypes.string.isRequired,
     options: PropTypes.shape({
         autoFormat: PropTypes.bool,
@@ -448,11 +450,8 @@ IField.propTypes = {
     }),
     threeDS: PropTypes.shape({
         enable3DS: PropTypes.bool,
-        waitForResponse: PropTypes.bool,
-        waitForResponseTimeout: PropTypes.number,
-        amount: PropTypes.string,
-        month: PropTypes.string,
-        year: PropTypes.string
+        environment: PropTypes.string,
+        handle3DSResults: PropTypes.func
     }),
     issuer: PropTypes.string,
     onLoad: PropTypes.func,
@@ -467,9 +466,7 @@ IField.defaultProps = {
         autoFormatSeparator: AUTO_FORMAT_DEFAULT_SEPARATOR
     },
     account: {},
-    threeDS: {
-        waitForResponseTimeout: WAIT_FOR_3DS_RESPONSE_TIMEOUT_DEFAULT
-    }
+    threeDS: {}
 };
 
 /**
@@ -496,4 +493,15 @@ IField.defaultProps = {
  * @property {string} xKey
  * @property {string} xSoftwareName
  * @property {string} xSoftwareVersion
+ */
+
+/**
+ * @callback Handle3DSResults
+ * @param {string} actionCode
+ * @param {string} xCavv
+ * @param {string} xEciFlag
+ * @param {string} xRefnum
+ * @param {string} xAuthenicationStatus
+ * @param {string} xSignatureVerification
+ * @param {string} xError
  */
