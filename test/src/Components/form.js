@@ -103,7 +103,6 @@ export default function AppForm() {
         x3dsSignatureVerificationStatus: xSignatureVerification,
         x3dsActionCode: actionCode,
       };
-      console.log(postData);
       const response = await fetch('/api/verifyjson', { method: 'POST', body: JSON.stringify(postData), headers: { 'Content-Type': 'application/json' } });
       setGateway3dsResponse(await response.json());
     } catch (error) {
