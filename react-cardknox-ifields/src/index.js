@@ -4,5 +4,6 @@ export default IField;
 export {
     CARD_TYPE,
     CVV_TYPE,
-    ACH_TYPE
+    ACH_TYPE,
+    THREEDS_ENVIRONMENT
 } from './constants';
