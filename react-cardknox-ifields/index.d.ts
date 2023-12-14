@@ -8,13 +8,18 @@ export interface Options {
     iFieldstyle: object
 }
 
+export function Handle3DSResults(actionCode: string,
+    xCavv: string,
+    xEciFlag: string,
+    xRefnum: string,
+    xAuthenticationStatus: string,
+    xSignatureVerification: string,
+    xError: string): void;
+
 export interface ThreeDS {
     enable3DS: boolean,
-    waitForResponse: boolean,
-    waitForResponseTimeout: number,
-    amount: number,
-    month: string,
-    year: string
+    environment: string,
+    handle3DSResults: Handle3DSResults
 }
 
 export interface Account {
@@ -59,6 +64,10 @@ export interface Props {
 export const CARD_TYPE: string;
 export const CVV_TYPE: string;
 export const ACH_TYPE: string;
+export const THREEDS_ENVIRONMENT = {
+    Production: string,
+    Staging: string
+}
 
 export default class IField {
     constructor(props: Props) { }
