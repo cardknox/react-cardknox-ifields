@@ -408,7 +408,7 @@ export default class App extends React.Component {
     </tr>
 </table>
 
-For full documentation see [here](https://docs.cardknox.com/cardknox-products/ifields#ifields-with-3d-secure-authentication)
+For full documentation about 3D-Secure with iFields see [here](https://docs.cardknox.com/cardknox-products/ifields#ifields-with-3d-secure-authentication)
 
 ### Update Event Data
 
