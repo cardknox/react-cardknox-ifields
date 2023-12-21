@@ -268,7 +268,7 @@ export default class App extends React.Component {
     </tr>
     <tr>
         <td>threeDS</td>
-        <td><a href="ThreeDS">ThreeDS</a></td>
+        <td><a href="#ThreeDS">ThreeDS</a></td>
         <td></td>
         <td></td>
     </tr>
