@@ -1,0 +1,14 @@
+.apple-pay-button {
+    visibility: hidden;
+    cursor: pointer;
+    -webkit-appearance: -apple-pay-button;
+}
+
+.apple-pay-button.visible {
+    visibility: visible;
+}
+
+.apple-pay-button:active {
+    background-color: rgb(152, 152, 152);
+}
+

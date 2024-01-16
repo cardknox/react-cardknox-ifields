@@ -1,7 +1,8 @@
 
 import React from 'react';
-import IField, { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
-
+// import IField, { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
+import CardknoxApplePay from './apple-pay';
+import * as lib from './lib';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -55,10 +56,19 @@ export default class App extends React.Component {
         this.cvvRef = React.createRef();
         this.cardRef = React.createRef();
     }
+
+    get getApplePayProperties()  {
+        return {
+            merchantIdentifier: 'merchant.aptest.cardknoxdev.com',
+            requiredShippingContactFields: ['postalAddress']
+        }
+    }
+
     render() {
         return (
             <>
-                <IField
+
+                {/* <IField
                     type={CARD_TYPE}
                     account={this.state.account}
                     options={this.state.ccoptions}
@@ -80,9 +90,15 @@ export default class App extends React.Component {
                     onSubmit={this.onSubmit}
                     onToken={this.onToken}
                     ref={this.cvvRef}
-                    onError={this.onError} />
+                    onError={this.onError} /> */}
                 <button style={{display: 'block'}} onClick={this.getToken}>Get CVV Token</button>
                 <button style={{display: 'block'}} onClick={this.getCard}>Get Card Token</button>
+                <div style={{width:'200px'}}>
+                    <CardknoxApplePay 
+                        properties = {this.getApplePayProperties}
+                        onGetTransactionInfo = {this.getApplePayTransInfo}
+                        onPaymentAuthorize = {this.applePayPaymentAuthorize}/>
+                </div>                
             </>
         );
     }
@@ -108,5 +124,58 @@ export default class App extends React.Component {
     }
     getCard = () => {
         this.cardRef.current.getToken();
+    }
+
+    getApplePayTransInfo = () => {
+        const lineItems = [
+            {
+                "label": "Subtotal",
+                "type": "final",
+                "amount": "1.0"
+            },
+            {
+                "label": "Express Shipping",
+                "amount": "1.50",
+                "type": "final"
+            }
+        ]; 
+        const total = {
+            type:  "final",
+            label: "Total",
+            amount: "2.50"
+        };
+        return {
+            lineItems,
+            total
+        };
+    }
+
+    getApplePayShippingMethods = () => {
+        return [
+            {
+                label: 'Free Shipping',
+                amount: '0.00',
+                identifier: 'free',
+                detail: 'Delivers in five business days',
+            },
+            {
+                label: 'Express Shipping',
+                amount: '1.50',
+                identifier: 'express',
+                detail: 'Delivers in two business days',
+            },
+        ];
+    } 
+    
+    applePayPaymentAuthorize = paymentResponse => {
+        return new Promise(function (resolve, reject) {
+            try {
+                console.log('applePayPaymentAuthorize', paymentResponse);
+                resolve(paymentResponse);
+            } catch(error) {
+                lib.logError("onPaymentAuthorize error.", error);
+                reject(error);
+            }
+        });
     }
 }
