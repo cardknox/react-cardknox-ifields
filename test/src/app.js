@@ -1,4 +1,3 @@
-
 import React from 'react';
 // import IField, { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
 import CardknoxApplePay from './apple-pay';
@@ -178,4 +177,12 @@ export default class App extends React.Component {
             }
         });
     }
+}
+import AppForm from './Components/form';
+
+export default function App() {
+
+    return (
+        <AppForm />
+    );
 }

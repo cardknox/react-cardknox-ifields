@@ -1,0 +1,48 @@
+#root {
+  background-color: papayawhip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.main {
+  width: 65%;
+  margin: 5% 10%;
+}
+
+.ifields {
+  height: 40px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.card-box {
+  max-width: 450px;
+  min-width: 406px;
+  width: 425px;
+  float: left;
+}
+
+.result-box {
+  max-width: 450px;
+  min-width: 406px;
+  width: 425px;
+  float: right;
+}
+
+#total {
+  color: #00103a;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.token-field {
+  word-wrap: break-word;
+}
+
+.smallWidth {
+  max-width: 23%;
+}
+
+.button-spaced {
+  padding: 10px 0;
+}

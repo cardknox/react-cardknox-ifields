@@ -268,7 +268,7 @@ export default class App extends React.Component {
     </tr>
     <tr>
         <td>threeDS</td>
-        <td><a href="">ThreeDS</a></td>
+        <td><a href="#ThreeDS">ThreeDS</a></td>
         <td></td>
         <td></td>
     </tr>
@@ -394,31 +394,21 @@ export default class App extends React.Component {
         <td>Turn 3DSecure on and off</td>
     </tr>
     <tr>
-        <td>waitForResponse</td>
-        <td>Boolean</td>
-        <td>Determine whether iFields should wait for a response from 3DSecure before getting the token</td>
+        <td>environment</td>
+        <td>String</td>
+        <td>`Staging` or `Production`
+        <br/>
+        These values can be imported from the package
+        </td>
     </tr>
     <tr>
-        <td>waitForResponseTimeout</td>
-        <td>Number</td>
-        <td>The 3DSecure response timeout in milli-seconds. The default value is 2000 (2 seconds).</td>
-    </tr>
-    <tr>
-        <td>amount</td>
-        <td>Number</td>
-        <td>The transaction amount</td>
-    </tr>
-    <tr>
-        <td>month</td>
-        <td>Number</td>
-        <td>The 2-digit card expiration month</td>
-    </tr>
-    <tr>
-        <td>year</td>
-        <td>Number</td>
-        <td>The 2-digit card expiration year</td>
+        <td>handle3DSResults</td>
+        <td>Function</td>
+        <td>A callback to handle the 3DS results</td>
     </tr>
 </table>
+
+For full documentation about 3D-Secure with iFields see [here](https://docs.cardknox.com/cardknox-products/ifields#ifields-with-3d-secure-authentication)
 
 ### Update Event Data
 
@@ -509,4 +499,4 @@ export default class App extends React.Component {
 
 ---
 
-**iFields Version:** [2.11.2112.1402-beta](https://cdn.cardknox.com/ifields/2.11.2112.1402-beta/ifield-sample.htm)
+**iFields Version:** [2.15.2309.2601](https://cdn.cardknox.com/ifields/2.15.2309.2601/ifield-sample.htm)
