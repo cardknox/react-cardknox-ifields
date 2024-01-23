@@ -1,7 +1,5 @@
 import React from 'react';
-// import IField, { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
-import CardknoxApplePay from './apple-pay';
-import * as lib from './lib';
+import IField, { CARD_TYPE, CVV_TYPE, CardknoxApplePay } from '@cardknox/react-ifields';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -67,7 +65,7 @@ export default class App extends React.Component {
         return (
             <>
 
-                {/* <IField
+                 <IField
                     type={CARD_TYPE}
                     account={this.state.account}
                     options={this.state.ccoptions}
@@ -89,11 +87,12 @@ export default class App extends React.Component {
                     onSubmit={this.onSubmit}
                     onToken={this.onToken}
                     ref={this.cvvRef}
-                    onError={this.onError} /> */}
+                    onError={this.onError} /> 
                 <button style={{display: 'block'}} onClick={this.getToken}>Get CVV Token</button>
                 <button style={{display: 'block'}} onClick={this.getCard}>Get Card Token</button>
                 <div style={{width:'200px'}}>
                     <CardknoxApplePay 
+                        enableLogging = {true}
                         properties = {this.getApplePayProperties}
                         onGetTransactionInfo = {this.getApplePayTransInfo}
                         onPaymentAuthorize = {this.applePayPaymentAuthorize}/>
@@ -172,17 +171,9 @@ export default class App extends React.Component {
                 console.log('applePayPaymentAuthorize', paymentResponse);
                 resolve(paymentResponse);
             } catch(error) {
-                lib.logError("onPaymentAuthorize error.", error);
+                console.error("onPaymentAuthorize error.", error);
                 reject(error);
             }
         });
     }
-}
-import AppForm from './Components/form';
-
-export default function App() {
-
-    return (
-        <AppForm />
-    );
 }

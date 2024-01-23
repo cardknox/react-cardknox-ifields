@@ -1,16 +1,9 @@
-import { has, each, startsWith } from 'lodash';
-
-import principalService from './principalService';
-import HttpServiceError from './httpServiceError';
-import { fixJsonFormat } from '../utilities/fix-json-format';
-import logger from '../utilities/logger';
-import updateApiEndpoint from 'common/utilities/UpdateApiEndpoint';
-
-const applicationSettings = ApplicationSettings;
+import { each } from 'lodash';
+import * as lib from '../lib';
 
 class HttpService {
-	constructor(principalService) {
-		this.principalService = principalService;
+    constructor(props) {        
+		this.state = props;
 	}
 
 	tryParse = (text, ...parsers) => {
@@ -28,38 +21,22 @@ class HttpService {
 		return data;
 	};
 
-	checkIfApiError = (response, url) => {
+	checkIfError = (response) => {
 		const { data, ok } = response;
-		if (
-			data &&
-			(!!data.xError ||
-				!!data.xMessage ||
-				!!data.errormessage ||
-				!!data.Error ||
-				(!!data.error && !startsWith(url, applicationSettings.kvaasEndpoint)))
-		) {
-			throw {
-				isApiError: true,
-				ref: data.xGatewayRefNum || data.xRefNum || data.xRecurringRefNum || data.refnum || data.RefNum,
-				message: data.xError || data.xMessage || data.errormessage || data.Error || data.error,
-				success: false,
-				data,
-			};
-		}
 		if (!ok && (data && !data.size)) {
 			const errorMessage = { response: data };
 			throw errorMessage;
 		}
-
 		return response;
 	};
-	handleResponse = async (response, options) => {
+	handleResponse = async (response) => {
 		const text = await response.text();
-		const data = this.tryParse(text, JSON.parse, content => this.deserialize(content, options.fixBatchData));
+		const data = this.tryParse(text, JSON.parse, content => this.deserialize(content));
 		return { data, ok: response.ok, status: response.status };
 	};
 
-	httpRequest(url, options, deserializedBody) {
+	httpRequest(url, options, body) {
+		const { enableLogging } = this.state;
 		const request = new Request(url, options);
 
 		return new Promise((resolve, reject) => {
@@ -69,37 +46,18 @@ class HttpService {
 						? { data: response.blob(), ok: response.ok, status: response.status }
 						: this.handleResponse(response, options)
 				)
-				.then(response => this.checkIfApiError(response, url))
+				.then(response => this.checkIfError(response))
 				.then(response => {
-					if (!options.skipLogging) {
-						logger.logApiCall({
-							url,
-							request: deserializedBody,
-							response,
-						});
-					}
+					lib.logDebug(enableLogging, `url: ${url}`,`request: ${JSON.stringify(body)}`, `response: ${JSON.stringify(response)}`);
 					return resolve(response.data);
 				})
 				.catch(ex => {
 					if (options.skipLogging) {
 						resolve();
 					} else {
-						logger.logApiCall({
-							url,
-							request: deserializedBody,
-							response: ex && ex.response,
-						});
-						if (ex && ex.isApiError) {
-							reject(ex);
-						} else {
-							reject(
-								new HttpServiceError({
-									ex,
-									request,
-									response: ex.response,
-								})
-							);
-						}
+						const response = ex && ex.response;
+						lib.logError(enableLogging, `url: ${url};\nrequest: ${body}`, response);
+						reject(ex);
 					}
 				});
 		});
@@ -108,16 +66,8 @@ class HttpService {
 	async post(url, body, options = {}) {
 		this.initializeHeaders(options, options.isJson);
 		options.method = 'POST';
-		let deserializedBody = {};
-		if (options.noInit) {
-			deserializedBody = body;
-		} else if (body) {
-			deserializedBody = await this.initializeBody(url, body, options.allowPublic);
-		}
-
-		options.body = options.isJson ? JSON.stringify(deserializedBody) : this.serialize(deserializedBody);
-
-		return await this.httpRequest(url, options, deserializedBody);
+		options.body = body ? options.isJson ? JSON.stringify(body) : this.serialize(body) : undefined;
+		return await this.httpRequest(url, options, body);
 	}
 
 	async get(url, options = {}, isJson = false) {
@@ -139,52 +89,6 @@ class HttpService {
 		} else if (!hasContentType) {
 			options.headers.set('Content-Type', 'application/x-www-form-urlencoded');
 		}
-
-		if (applicationSettings.apiOrigin) {
-			options.headers.set('Origin', applicationSettings.apiOrigin);
-		}
-		if (applicationSettings.apiRequestedWith) {
-			options.headers.set('X-Requested-With', applicationSettings.apiRequestedWith);
-		}
-	}
-
-	async initializeBody(url, content, allowPublic = false) {
-		let key = content.xKey;
-
-		const principal = principalService.get();
-		if (!allowPublic && !key && !startsWith(url, applicationSettings.kvaasEndpoint)) {
-			if (!principal || !principal.id) {
-				principalService.clear();
-				window.location.reload();
-			}
-			key = principal.id;
-		}
-		if (startsWith(url, updateApiEndpoint(null))) {
-			if (!content.xUserName && !allowPublic && principal) {
-				content.xUserName = principal.username;
-			}
-			if (!content.xKey) {
-				content.xKey = key;
-			}
-			content.xVersion = applicationSettings.apiVersion;
-			content.xSoftwareName = SoftwareSettings.name;
-			content.xSoftwareVersion = SoftwareSettings.version;
-		} else if (
-			startsWith(url, applicationSettings.recurringApiEndpoint) ||
-			startsWith(url, applicationSettings.kvaasEndpoint) ||
-			startsWith(url, applicationSettings.logoManagementEndpoint)
-		) {
-			content.softwareName = SoftwareSettings.name;
-			content.softwareVersion = SoftwareSettings.version;
-		} else if (startsWith(url, applicationSettings.keyManagementEndpoint)) {
-			if (!content.adminKey) {
-				content.adminKey = key;
-			}
-			content.dataVersion = applicationSettings.keyManagementApiVersion;
-		} else if (startsWith(url, applicationSettings.paymentSiteApiEndpoint)) {
-			content.ssoKey = key;
-		}
-		return content;
 	}
 
 	serialize(content) {
@@ -206,19 +110,13 @@ class HttpService {
 		return data.join('&');
 	}
 
-	deserialize(content, fixBatchData) {
+	deserialize(content) {
 		let data = {};
 		content.replace(/\+/g, ' ').replace(/([^=&]+)=([^&]*)/g, function(m, key, value) {
 			data[decodeURIComponent(key)] = decodeURIComponent(value);
 		});
-
-		if (has(data, 'xReportData')) {
-			data.xReportData = fixBatchData ? fixJsonFormat(data.xReportData) : JSON.parse(data.xReportData);
-		}
 		return data;
 	}
 }
 
-const httpService = new HttpService(principalService);
-
-export default httpService;
+export default HttpService;

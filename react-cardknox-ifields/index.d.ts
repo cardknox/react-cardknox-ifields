@@ -1,3 +1,4 @@
+import { string } from "prop-types"
 
 export interface Options {
     placeholder: string,
@@ -71,4 +72,112 @@ export const THREEDS_ENVIRONMENT = {
 
 export default class IField {
     constructor(props: Props) { }
+}
+
+//Apple Pay
+export const ApplePayButtonColor = {
+    black: "black",
+    white: "white",
+    whiteOutline: "white-outline"
+}    
+
+export const ApplePayButtonType = {
+    buy: "buy",
+    pay: "pay",
+    plain: "plain",
+    order: "order",
+    donate: "donate",
+    continue: "continue",
+    checkout: "check-out"
+}    
+
+export const ApplePayLineItemType = {
+    pending: "pending",
+    final: "final"
+}
+export interface ApplePayShippingMethod {
+    label: string,
+    detail: string,
+    amount: string,
+    identifier: string
+}
+
+export interface ApplePayLineItem {
+    label: string,
+    type: ApplePayLineItemType,
+    amount: string
+}
+
+export interface ApplePayTransactionInfo {
+    lineItems: Array<ApplePayLineItem>,
+    total: ApplePayLineItem,
+}
+
+export interface ApplePayPaymentToken {
+    paymentMethod: object,
+    transactionIdentifier: string,
+    paymentData: object
+}
+
+export interface ApplePayPaymentContact {
+    phoneNumber: string,
+    emailAddress: string,
+    givenName: string,
+    familyName: string,
+    phoneticGivenName: string,
+    phoneticFamilyName: string,
+    addressLines: Array<string>,
+    subLocality: string,
+    locality: string,
+    postalCode: string,
+    subAdministrativeArea: string,
+    administrativeArea: string,
+    country: string,
+    countryCode: string
+}
+
+export interface ApplePayPayment {
+    token: ApplePayPaymentToken,
+    billingContact: ApplePayPaymentContact,
+    shippingContact: ApplePayPaymentContact
+}
+
+export interface ApplePayInitalProps {
+    buttonOptions: {
+        buttonColor: APButtonColor,
+        buttonType: APButtonType,
+        width: number,
+        height: number,
+        minWidth: number,
+        minHeight: number
+    },
+    walletCheckEnabled: boolean,
+    merchantIdentifier: string,
+    merchantCapabilities: Array<string>,
+    supportedNetworks: Array<string>,
+    supportedCountries: Array<string>,
+    countryCode: string,
+    currencyCode: string,
+    requiredFeatures: Array<string>,
+    requiredBillingContactFields: Array<string>,
+    requiredShippingContactFields: Array<string>,
+    shippingMethods: Array<APShippingMethod>
+}
+
+export interface ApplePayProps {
+    properties: ApplePayInitalProps,
+    enableLogging: boolean,
+    onGetTransactionInfo: () => ApplePayTransactionInfo,
+    onPaymentAuthorize: (payment: ApplePayPayment) => Promise,
+    onValidateMerchant: () => Promise,
+    onBeforeProcessPayment: () => Promise,
+    onGetShippingMethods: () => Array<ApplePayShippingMethod>,
+    onShippingContactSelected: (shippingContact: ApplePayPaymentContact) => Promise,
+    onShippingMethodSelected: (shippingMethod: ApplePayShippingMethod) => Promise,
+    onPaymentMethodSelected: (paymentMethod: object) => Promise,
+    onCancel: () => void
+}
+
+export class CardknoxApplePay {
+    constructor(props: ApplePayProps) { }
 }
