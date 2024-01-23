@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import * as lib from './lib';
-import httpService from './services/httpService';
+import HttpService from './services/httpService';
 import './styles/main.css';
 
 const MAX_VERSION = 100;
@@ -45,11 +45,14 @@ class CardknoxApplePay extends Component {
     constructor(props) {        
 		super(props);
 		this.state = this.initialState;
+        const {enableLogging} = this.state;
+        this.httpService = new HttpService({enableLogging});
 	};
 
     get initialState() {
-        const {properties} = this.props;
+        const {enableLogging, properties} = this.props;
         return {
+            enableLogging: enableLogging || false,
             buttonOptions: {
                 buttonColor: properties.buttonOptions?.buttonColor || APButtonColor.black,
                 buttonType: properties.buttonOptions?.buttonType || APButtonType.pay,
@@ -141,7 +144,6 @@ class CardknoxApplePay extends Component {
             if (supportedVersion < minRequiredVersion){
                 throw new Error("Minimum Apple Pay required version is not supported by this device.\nPlease upgrade your iOS version.");
             }
-            console.log("Apple Pay supported version", supportedVersion);
             this.setState({
                 appVersion: supportedVersion
             });                
@@ -155,7 +157,7 @@ class CardknoxApplePay extends Component {
                     });                
                 }                
             } catch (error) {
-                lib.logError("onGetTransactionInfo error", error);                
+                lib.logError(this.state.enableLogging, "onGetTransactionInfo error", error);                
             }
             try {
                 if (this.props.onGetShippingMethods) {
@@ -165,7 +167,7 @@ class CardknoxApplePay extends Component {
                     });                
                 }
             } catch (error) {
-                lib.logError("onGetShippingMethods error", error);                
+                lib.logError(this.state.enableLogging, "onGetShippingMethods error", error);                
             }
             const {walletCheckEnabled, merchantIdentifier} = this.state;
             if (walletCheckEnabled) {
@@ -175,7 +177,7 @@ class CardknoxApplePay extends Component {
                 }
             } 
         } catch (err) {
-            lib.logError("Apple Pay initialization failed", err);
+            lib.logError(this.state.enableLogging, "Apple Pay initialization failed", err);
         }
     };
 
@@ -205,14 +207,14 @@ class CardknoxApplePay extends Component {
             if (!error.code) {
                 throw new Error("'error.code' is required. For available codes refer to 'APErrorCode'");
             }
-            lib.logError("ApplePayError custom error", error);
+            lib.logError(this.state.enableLogging, "ApplePayError custom error", error);
             return new window.ApplePayError(error.code, error.contactField, error.message);
         }
         return null;
     };
 
     onCancel = (e) => {
-        lib.logError("Apple Pay Session canceled", JSON.stringify(e));
+        lib.logError(this.state.enableLogging, "Apple Pay Session canceled", JSON.stringify(e));
         if (this.props.onCancel) {
             this.props.onCancel(e);
         }
@@ -222,31 +224,29 @@ class CardknoxApplePay extends Component {
         const {session} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError("onValidateMerchant", "Not trusted");
+                lib.logError(this.state.enableLogging, "onValidateMerchant", "Not trusted");
                 session.abort();
             }
             const response = this.props.onValidateMerchant ?
                                 await this.props.onValidateMerchant() :
                                 await this.validateMerchant();
             const resp = typeof(response) === "string" ? JSON.parse(response) : response;
-            console.log("onValidateMerchant", resp.signature);
             session.completeMerchantValidation(resp);
-            console.log("onValidateMerchant", "completeMerchantValidation");
         } catch (err) {
-            lib.logError("onValidateMerchant error", err);
+            lib.logError(this.state.enableLogging, "onValidateMerchant error", err);
             session.abort();
         }
     }
 
     validateMerchant = async () => {
-        return await httpService.post("https://api.cardknox.com/applepay/validate");            
+        return await this.httpService.post("https://api.cardknox.com/applepay/validate");            
     }
 
     onPaymentAuthorize = async (event) => {
         const {session} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError("onPaymentAuthorize", "Not trusted");
+                lib.logError(this.state.enableLogging, "onPaymentAuthorize", "Not trusted");
                 session.abort();
             }
             const response = await this.props.onPaymentAuthorize(event.payment);
@@ -255,7 +255,7 @@ class CardknoxApplePay extends Component {
                 this.props.onPaymentComplete({response: response});
             }            
         } catch (error) {
-            lib.logError("onPaymentAuthorize error", error);
+            lib.logError(this.state.enableLogging, "onPaymentAuthorize error", error);
             session.abort();
             if (this.props.onPaymentComplete) {
                 this.props.onPaymentComplete({error: error});
@@ -267,12 +267,12 @@ class CardknoxApplePay extends Component {
         const {session, appVersion, total, lineItems, shippingMethods} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError("onShippingContactSelected", "Not trusted");
+                lib.logError(this.state.enableLogging, "onShippingContactSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
             if (this.props.onShippingContactSelected) {
-                const response = await this.props.onShippingContactSelected(event.payment);
+                const response = await this.props.onShippingContactSelected(event.shippingContact);
                 this.validateFeatures(response);
                 finalResp = { 
                     newTotal: response.total,
@@ -295,7 +295,7 @@ class CardknoxApplePay extends Component {
             appVersion >= 3 ? session.completeShippingContactSelection(finalResp)
                             : session.completeShippingContactSelection(window.ApplePaySession.STATUS_SUCCESS, finalResp.newShippingMethods, finalResp.newTotal, finalResp.newLineItems);
         } catch (err) {
-            lib.logError("onShippingContactSelected error", err);
+            lib.logError(this.state.enableLogging, "onShippingContactSelected error", err);
             session.abort();
         }        
     }
@@ -304,7 +304,7 @@ class CardknoxApplePay extends Component {
         const {session, appVersion, total, lineItems, shippingMethods} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError("onShippingMethodSelected", "Not trusted");
+                lib.logError(this.state.enableLogging, "onShippingMethodSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
@@ -332,7 +332,7 @@ class CardknoxApplePay extends Component {
             appVersion >= 3 ? session.completeShippingMethodSelection(finalResp)
                             : session.completeShippingMethodSelection(window.ApplePaySession.STATUS_SUCCESS, finalResp.total, finalResp.lineItems);
         } catch (err) {
-            lib.logError("onShippingMethodSelected error", err);
+            lib.logError(this.state.enableLogging, "onShippingMethodSelected error", err);
             session.abort();
         }
     }
@@ -341,7 +341,7 @@ class CardknoxApplePay extends Component {
         const {session, appVersion, total, lineItems, shippingMethods} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError("onPaymentMethodSelected", "Not trusted");
+                lib.logError(this.state.enableLogging, "onPaymentMethodSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
@@ -373,7 +373,7 @@ class CardknoxApplePay extends Component {
             appVersion >= 3 ? session.completePaymentMethodSelection(finalResp)
                             : session.completePaymentMethodSelection(finalResp.total, finalResp.lineItems);
         } catch (err){
-            lib.logError("onPaymentMethodSelected error", err);
+            lib.logError(this.state.enableLogging, "onPaymentMethodSelected error", err);
             session.abort();
         }
     }
@@ -448,7 +448,7 @@ class CardknoxApplePay extends Component {
             }
             session.begin();            
         } catch (error) {
-            lib.logError("Apple Pay session error", error);
+            lib.logError(this.state.enableLogging, "Apple Pay session error", error);
         }
     }
 
@@ -467,13 +467,13 @@ class CardknoxApplePay extends Component {
 CardknoxApplePay.propTypes = {
     properties: PropTypes.object.isRequired,
     onGetTransactionInfo: PropTypes.func.isRequired,
-    onGetShippingMethods: PropTypes.func,
     onPaymentAuthorize: PropTypes.func.isRequired,
     onValidateMerchant: PropTypes.func,
+    onBeforeProcessPayment: PropTypes.func,
+    onGetShippingMethods: PropTypes.func,
     onShippingContactSelected: PropTypes.func,
     onShippingMethodSelected: PropTypes.func,
     onPaymentMethodSelected: PropTypes.func,
-    onBeforeProcessPayment: PropTypes.func,
     onCancel: PropTypes.func
 };
 
