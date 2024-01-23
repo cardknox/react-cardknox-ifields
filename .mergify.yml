@@ -1,242 +1,31 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-codereview required
+queue_rules:
+  - name: default
+    conditions:
+      - label!=donotmerge
+      - label!=wip
+      - label!=pending base merge
+
+pull_request_rules:
+  - name: Update and Merge
+    conditions:
+      - "#approved-reviews-by>=1"
+      - -label~=required
+      - label!=donotmerge
+      - label!=wip
+      - label!=pending base merge
+    actions:
+      queue:
+        name: default
+        method: squash
+  - name: remove all 'required' labels
+    conditions:
+      - "#approved-reviews-by=0"
+      - -closed
+    actions:
+      label:
+        remove:
+          - seniordevs required
+          - corecodereview required
           - secops required
           - bi required
   - name: add label if approved but seniordevs is still required
