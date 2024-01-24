@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import WrappedIfield from './wrapped-ifield';
-import { CARD_TYPE, CVV_TYPE } from '@cardknox/react-ifields';
+import { CARD_TYPE, CVV_TYPE, CardknoxApplePay } from '@cardknox/react-ifields';
 import { format } from 'date-fns';
 
 export default function AppForm() {
@@ -110,6 +110,67 @@ export default function AppForm() {
       setGateway3dsResponse(error);
     }
   };
+
+  const getApplePayProperties = () => {
+    return {
+        merchantIdentifier: 'merchant.aptest.cardknoxdev.com',
+        requiredShippingContactFields: ['postalAddress']
+    }
+  };
+
+  const getApplePayTransInfo = () => {
+    const lineItems = [
+        {
+            "label": "Subtotal",
+            "type": "final",
+            "amount": "1.0"
+        },
+        {
+            "label": "Express Shipping",
+            "amount": "1.50",
+            "type": "final"
+        }
+    ]; 
+    const total = {
+        type:  "final",
+        label: "Total",
+        amount: "2.50"
+    };
+    return {
+        lineItems,
+        total
+    };
+  };
+
+  const getApplePayShippingMethods = () => {
+    return [
+        {
+            label: 'Free Shipping',
+            amount: '0.00',
+            identifier: 'free',
+            detail: 'Delivers in five business days',
+        },
+        {
+            label: 'Express Shipping',
+            amount: '1.50',
+            identifier: 'express',
+            detail: 'Delivers in two business days',
+        },
+    ];
+  };
+
+  const applePayPaymentAuthorize = paymentResponse => {
+    return new Promise(function (resolve, reject) {
+        try {
+            console.log('applePayPaymentAuthorize', paymentResponse);
+            resolve(paymentResponse);
+        } catch(error) {
+            console.error("onPaymentAuthorize error.", error);
+            reject(error);
+        }
+    });
+  };
+
   return (
     <div>
       <section className='hero is-primary'>
@@ -250,6 +311,13 @@ export default function AppForm() {
               <div className='button-spaced mt-3'>
                 <button className='button is-success is-rounded' onClick={submitToGateway}>Submit to Gateway</button>
               </div>
+              <div style={{width:'100px',display:'block',marginTop:'12px'}}>
+                <CardknoxApplePay 
+                    enableLogging = {true}
+                    properties = {this.getApplePayProperties}
+                    onGetTransactionInfo = {this.getApplePayTransInfo}
+                    onPaymentAuthorize = {this.applePayPaymentAuthorize}/>
+              </div>                
             </section>
           </div>
           <div className='column'>
