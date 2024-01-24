@@ -90,7 +90,7 @@ export default class App extends React.Component {
                     onError={this.onError} /> 
                 <button style={{display: 'block'}} onClick={this.getToken}>Get CVV Token</button>
                 <button style={{display: 'block'}} onClick={this.getCard}>Get Card Token</button>
-                <div style={{width:'200px'}}>
+                <div style={{width:'100px',display:'block',marginTop:'12px'}}>
                     <CardknoxApplePay 
                         enableLogging = {true}
                         properties = {this.getApplePayProperties}
