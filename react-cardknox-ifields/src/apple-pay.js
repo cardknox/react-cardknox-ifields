@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as lib from './lib';
 import HttpService from './services/httpService';
 import './styles/main.css';
+import { logDebug } from './lib';
 
 const MAX_VERSION = 100;
 
@@ -465,6 +466,7 @@ class CardknoxApplePay extends Component {
 }
 
 CardknoxApplePay.propTypes = {
+    enableLogging: PropTypes.bool,
     properties: PropTypes.object.isRequired,
     onGetTransactionInfo: PropTypes.func.isRequired,
     onPaymentAuthorize: PropTypes.func.isRequired,

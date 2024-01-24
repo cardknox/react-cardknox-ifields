@@ -311,12 +311,8 @@ export default function AppForm() {
               <div className='button-spaced mt-3'>
                 <button className='button is-success is-rounded' onClick={submitToGateway}>Submit to Gateway</button>
               </div>
-              <div style={{width:'100px',display:'block',marginTop:'12px'}}>
-                <CardknoxApplePay 
-                    enableLogging = {true}
-                    properties = {this.getApplePayProperties}
-                    onGetTransactionInfo = {this.getApplePayTransInfo}
-                    onPaymentAuthorize = {this.applePayPaymentAuthorize}/>
+              <div style={{width:'175px',display:'block',marginTop:'12px'}}>
+                <CardknoxApplePay enableLogging={true} properties={getApplePayProperties()} onGetTransactionInfo={getApplePayTransInfo} onPaymentAuthorize={applePayPaymentAuthorize} />
               </div>                
             </section>
           </div>

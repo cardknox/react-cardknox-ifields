@@ -15,9 +15,15 @@ export const logError = (enableLogging, message, error) => {
     console.error.apply(console.error, request);
 }
 
-export const logDebug = (enableLogging, req) => {
+export const logDebug = (enableLogging, ...req) => {
     if (!enableLogging) return;
+    if (!req || req.length === 0) return;
 
+    if (req.length > 1) {
+        console.log.apply(console.log, req);
+        return;
+    } 
+    req = req[0];
     if (typeof(req) === 'string') {
         console.log(JSON.stringify(req));
     } else if (typeof(req) === 'object') {

@@ -163,8 +163,8 @@ export interface ApplePayInitalProps {
 }
 
 export interface ApplePayProps {
-    properties: ApplePayInitalProps,
     enableLogging: boolean,
+    properties: ApplePayInitalProps,
     onGetTransactionInfo: () => ApplePayTransactionInfo,
     onPaymentAuthorize: (payment: ApplePayPayment) => Promise,
     onValidateMerchant: () => Promise,
