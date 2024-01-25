@@ -1,5 +1,7 @@
 # Changelog
 
+## changelog for version 2.2.59
+- 3Ds 2.0 support (Breaking change)
 ## changelog for version 1.2.57
 - added 60 second timeout
 ## changelog for version 1.0.1
