@@ -5,6 +5,7 @@ export const PING = 'ping';
 export const STYLE = 'style';
 export const ERROR = 'error';
 export const AUTO_SUBMIT = 'autoSubmit';
+export const BLOCK_NON_NUMERIC_CHARS = 'blockNonNumericInput';
 export const UPDATE = 'update';
 export const GET_TOKEN = 'getToken';
 export const FOCUS = 'focus';
