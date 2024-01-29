@@ -73,7 +73,7 @@ export default class IField extends React.Component {
     updateIssuer(prevProps) {
         const { issuer } = this.props;
         if (issuer !== prevProps.issuer) {
-            this.updateIssuer(issuer);
+            this.setIssuer(issuer);
         }
     }
     updateAutoFormat(prevProps) {
@@ -349,7 +349,7 @@ export default class IField extends React.Component {
      * 
      * @param {string} issuer 
      */
-    updateIssuer(issuer) {
+    setIssuer(issuer) {
         const message = {
             action: UPDATE_ISSUER,
             issuer: issuer || 'unknown'
