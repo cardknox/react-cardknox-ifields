@@ -40,13 +40,26 @@ export default class IField extends React.Component {
         window.removeEventListener('message', this.onMessage);
     }
     componentDidUpdate(prevProps) {
-        const { props } = this;
-        const { threeDS, options } = props;
-        const { threeDS: prevThreeDS, options: prevOptions } = prevProps;
-
-        if (props.account !== prevProps.account) {
-            this.setAccount(props.account);
+        this.updateAccount(prevProps);
+        this.update3DS(prevProps);
+        this.updateIssuer(prevProps);
+        this.updateAutoFormat(prevProps);
+        this.updateAutoSubmit(prevProps);
+        this.updateBlockNonDigitInput(prevProps);
+        this.updateLogging(prevProps);
+        this.updatePlaceholder(prevProps);
+        this.updateStyle(prevProps);
+    }
+    updateAccount(prevProps) {
+        const { account } = this.props;
+        if (account !== prevProps.account) {
+            this.setAccount(account);
         }
+    }
+    update3DS(prevProps) {
+        const { threeDS } = this.props;
+        const { threeDS: prevThreeDS } = prevProps;
+
         if (threeDS?.enable3DS) {
             if (this.state.iFrameLoaded && (!prevThreeDS?.enable3DS
                 || threeDS.environment !== prevThreeDS.environment
@@ -56,32 +69,58 @@ export default class IField extends React.Component {
         } else if (prevThreeDS?.enable3DS) {
             this.disable3DS();
         }
-
-        if (props.issuer !== prevProps.issuer) {
-            this.updateIssuer(props.issuer);
+    }
+    updateIssuer(prevProps) {
+        const { issuer } = this.props;
+        if (issuer !== prevProps.issuer) {
+            this.updateIssuer(issuer);
         }
+    }
+    updateAutoFormat(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.autoFormat !== prevOptions.autoFormat ||
             options.autoFormatSeparator !== prevOptions.autoFormatSeparator) {
             this.enableAutoFormat(options.autoFormatSeparator);
         }
+    }
+    updateAutoSubmit(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.autoSubmit !== prevOptions.autoSubmit ||
             options.autoSubmitFormId !== prevOptions.autoSubmitFormId) {
             this.enableAutoSubmit(options.autoSubmitFormId);
         }
+    }
+    updateBlockNonDigitInput(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.blockNonDigitInput !== prevOptions.blockNonDigitInput && options.blockNonDigitInput) {
             this.enableBlockNonDigitInput();
         }
+    }
+    updateLogging(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.enableLogging !== prevOptions.enableLogging) {
             this.enableLogging();
         }
+    }
+    updatePlaceholder(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.placeholder !== prevOptions.placeholder) {
             this.setPlaceholder(options.placeholder);
         }
+    }
+    updateStyle(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.iFieldstyle !== prevOptions.iFieldstyle) {
             this.setStyle(options.iFieldstyle);
