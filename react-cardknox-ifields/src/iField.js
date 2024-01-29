@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {
-    LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, BLOCK_NON_NUMERIC_CHARS, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
+    LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, BLOCK_NON_NUMERIC_INPUT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
     CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, DISABLE3DS,
     AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE
 } from "./constants";
@@ -71,8 +71,8 @@ export default class IField extends React.Component {
             this.enableAutoSubmit(options.autoSubmitFormId);
         }
 
-        if (options.blockNonDigitChars !== prevOptions.blockNonDigitChars && options.blockNonDigitChars) {
-            this.enableBlockNonDigitChars();
+        if (options.blockNonDigitInput !== prevOptions.blockNonDigitInput && options.blockNonDigitInput) {
+            this.enableBlockNonDigitInput();
         }
 
         if (options.enableLogging !== prevOptions.enableLogging) {
@@ -137,8 +137,8 @@ export default class IField extends React.Component {
             this.enableLogging();
         if (props.options.autoFormat)
             this.enableAutoFormat(props.options.autoFormatSeparator);
-        if (props.options.blockNonDigitChars)
-            this.enableBlockNonDigitChars();
+        if (props.options.blockNonDigitInput)
+            this.enableBlockNonDigitInput();
         if (props.options.autoSubmit)
             this.enableAutoSubmit(props.options.autoSubmitFormId);
         if (props.options.iFieldstyle)
@@ -344,11 +344,11 @@ export default class IField extends React.Component {
         this.logAction(FORMAT);
         this.postMessage(message);
     }
-    enableBlockNonDigitChars() {
+    enableBlockNonDigitInput() {
         const message = {
-            action: BLOCK_NON_NUMERIC_CHARS
+            action: BLOCK_NON_NUMERIC_INPUT
         };
-        this.logAction(BLOCK_NON_NUMERIC_CHARS);
+        this.logAction(BLOCK_NON_NUMERIC_INPUT);
         this.postMessage(message);
     }
     enableLogging() {
@@ -449,7 +449,7 @@ IField.propTypes = {
     options: PropTypes.shape({
         autoFormat: PropTypes.bool,
         autoFormatSeparator: PropTypes.string,
-        blockNonDigitChars: PropTypes.bool,
+        blockNonDigitInput: PropTypes.bool,
         autoSubmit: PropTypes.bool,
         autoSubmitFormId: PropTypes.string,
         enableLogging: PropTypes.bool,

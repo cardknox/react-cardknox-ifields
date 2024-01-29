@@ -28,6 +28,7 @@ const WrappedIfield = React.forwardRef((props, ref) => {
     autoFormat: true,
     autoFormatSeparator: ' ',
     autoSubmit: false,
+    blockNonDigitInput: true,
     iFieldstyle: {
       width: "50%",
       "max-width": "100%",
