@@ -346,17 +346,22 @@ export default class App extends React.Component {
     <tr>
         <td>enableLogging</td>
         <td>Boolean</td>
-        <td>Turn iField logs to the console on and off</td>
+        <td>Turn iField logs to the console on and off.</td>
     </tr>
     <tr>
         <td>autoFormat</td>
         <td>Boolean</td>
-        <td>Turn iField auto-formatting on and off. This is only used for iFields of <i>card</i> type. See <i>autoFormatSeparator</i></td>
+        <td>Turn iField auto-formatting on and off. This is only used for iFields of <i>card</i> type. See <i>autoFormatSeparator</i>.</td>
     </tr>
     <tr>
         <td>autoFormatSeparator</td>
         <td>String</td>
         <td>A string to be used to auto-format card numbers when <i>autoFormat</i> is turned on. The default value is " " (space).</td>
+    </tr>
+    <tr>
+        <td>blockNonDigitInput</td>
+        <td>Boolean</td>
+        <td>Block non-numeric character input. This is only used for iFields of <i>card</i> type. This does not interfere with <i>autoFormatSeparator</i>.</td>
     </tr>
     <tr>
         <td>autoSubmit</td>
