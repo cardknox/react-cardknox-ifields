@@ -45,7 +45,7 @@ export default class IField extends React.Component {
         this.updateIssuer(prevProps);
         this.updateAutoFormat(prevProps);
         this.updateAutoSubmit(prevProps);
-        this.updateBlockNonDigitInput(prevProps);
+        this.updateBlockNonNumericInput(prevProps);
         this.updateLogging(prevProps);
         this.updatePlaceholder(prevProps);
         this.updateStyle(prevProps);
@@ -94,12 +94,12 @@ export default class IField extends React.Component {
             this.enableAutoSubmit(options.autoSubmitFormId);
         }
     }
-    updateBlockNonDigitInput(prevProps) {
+    updateBlockNonNumericInput(prevProps) {
         const { options } = this.props;
         const { options: prevOptions } = prevProps;
 
-        if (options.blockNonDigitInput !== prevOptions.blockNonDigitInput && options.blockNonDigitInput) {
-            this.enableBlockNonDigitInput();
+        if (options.blockNonNumericInput !== prevOptions.blockNonNumericInput && options.blockNonNumericInput) {
+            this.enableBlockNonNumericInput();
         }
     }
     updateLogging(prevProps) {
@@ -176,8 +176,8 @@ export default class IField extends React.Component {
             this.enableLogging();
         if (props.options.autoFormat)
             this.enableAutoFormat(props.options.autoFormatSeparator);
-        if (props.options.blockNonDigitInput)
-            this.enableBlockNonDigitInput();
+        if (props.options.blockNonNumericInput)
+            this.enableBlockNonNumericInput();
         if (props.options.autoSubmit)
             this.enableAutoSubmit(props.options.autoSubmitFormId);
         if (props.options.iFieldstyle)
@@ -383,7 +383,7 @@ export default class IField extends React.Component {
         this.logAction(FORMAT);
         this.postMessage(message);
     }
-    enableBlockNonDigitInput() {
+    enableBlockNonNumericInput() {
         const message = {
             action: BLOCK_NON_NUMERIC_INPUT
         };
@@ -488,7 +488,7 @@ IField.propTypes = {
     options: PropTypes.shape({
         autoFormat: PropTypes.bool,
         autoFormatSeparator: PropTypes.string,
-        blockNonDigitInput: PropTypes.bool,
+        blockNonNumericInput: PropTypes.bool,
         autoSubmit: PropTypes.bool,
         autoSubmitFormId: PropTypes.string,
         enableLogging: PropTypes.bool,
