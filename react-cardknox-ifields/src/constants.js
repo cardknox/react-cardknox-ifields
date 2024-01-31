@@ -23,7 +23,7 @@ export const ENABLE_AUTO_SUBMIT = 'enableAutoSubmit';
 export const ENABLE3DS = 'enable3DS';
 export const DISABLE3DS = 'disable3DS';
 export const AUTO_FORMAT_DEFAULT_SEPARATOR = " ";
-export const IFIELDS_VERSION = '2.15.2309.2601';
+export const IFIELDS_VERSION = '2.15.2401.3101';
 export const IFIELD_ORIGIN = "https://cdn.cardknox.com";
 export const THREEDS_ENVIRONMENT = {
   Production: 'production',
