@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {
-    LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
+    LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, BLOCK_NON_NUMERIC_INPUT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
     CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, DISABLE3DS,
     AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE
 } from "./constants";
@@ -40,13 +40,26 @@ export default class IField extends React.Component {
         window.removeEventListener('message', this.onMessage);
     }
     componentDidUpdate(prevProps) {
-        const { props } = this;
-        const { threeDS, options } = props;
-        const { threeDS: prevThreeDS, options: prevOptions } = prevProps;
-
-        if (props.account !== prevProps.account) {
-            this.setAccount(props.account);
+        this.updateAccount(prevProps);
+        this.update3DS(prevProps);
+        this.updateIssuer(prevProps);
+        this.updateAutoFormat(prevProps);
+        this.updateAutoSubmit(prevProps);
+        this.updateBlockNonNumericInput(prevProps);
+        this.updateLogging(prevProps);
+        this.updatePlaceholder(prevProps);
+        this.updateStyle(prevProps);
+    }
+    updateAccount(prevProps) {
+        const { account } = this.props;
+        if (account !== prevProps.account) {
+            this.setAccount(account);
         }
+    }
+    update3DS(prevProps) {
+        const { threeDS } = this.props;
+        const { threeDS: prevThreeDS } = prevProps;
+
         if (threeDS?.enable3DS) {
             if (this.state.iFrameLoaded && (!prevThreeDS?.enable3DS
                 || threeDS.environment !== prevThreeDS.environment
@@ -56,28 +69,58 @@ export default class IField extends React.Component {
         } else if (prevThreeDS?.enable3DS) {
             this.disable3DS();
         }
-
-        if (props.issuer !== prevProps.issuer) {
-            this.updateIssuer(props.issuer);
+    }
+    updateIssuer(prevProps) {
+        const { issuer } = this.props;
+        if (issuer !== prevProps.issuer) {
+            this.setIssuer(issuer);
         }
+    }
+    updateAutoFormat(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.autoFormat !== prevOptions.autoFormat ||
             options.autoFormatSeparator !== prevOptions.autoFormatSeparator) {
             this.enableAutoFormat(options.autoFormatSeparator);
         }
+    }
+    updateAutoSubmit(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.autoSubmit !== prevOptions.autoSubmit ||
             options.autoSubmitFormId !== prevOptions.autoSubmitFormId) {
             this.enableAutoSubmit(options.autoSubmitFormId);
         }
+    }
+    updateBlockNonNumericInput(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
+
+        if (options.blockNonNumericInput !== prevOptions.blockNonNumericInput && options.blockNonNumericInput) {
+            this.enableBlockNonNumericInput();
+        }
+    }
+    updateLogging(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.enableLogging !== prevOptions.enableLogging) {
             this.enableLogging();
         }
+    }
+    updatePlaceholder(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.placeholder !== prevOptions.placeholder) {
             this.setPlaceholder(options.placeholder);
         }
+    }
+    updateStyle(prevProps) {
+        const { options } = this.props;
+        const { options: prevOptions } = prevProps;
 
         if (options.iFieldstyle !== prevOptions.iFieldstyle) {
             this.setStyle(options.iFieldstyle);
@@ -133,6 +176,8 @@ export default class IField extends React.Component {
             this.enableLogging();
         if (props.options.autoFormat)
             this.enableAutoFormat(props.options.autoFormatSeparator);
+        if (props.options.blockNonNumericInput)
+            this.enableBlockNonNumericInput();
         if (props.options.autoSubmit)
             this.enableAutoSubmit(props.options.autoSubmitFormId);
         if (props.options.iFieldstyle)
@@ -304,7 +349,7 @@ export default class IField extends React.Component {
      * 
      * @param {string} issuer 
      */
-    updateIssuer(issuer) {
+    setIssuer(issuer) {
         const message = {
             action: UPDATE_ISSUER,
             issuer: issuer || 'unknown'
@@ -336,6 +381,13 @@ export default class IField extends React.Component {
             }
         };
         this.logAction(FORMAT);
+        this.postMessage(message);
+    }
+    enableBlockNonNumericInput() {
+        const message = {
+            action: BLOCK_NON_NUMERIC_INPUT
+        };
+        this.logAction(BLOCK_NON_NUMERIC_INPUT);
         this.postMessage(message);
     }
     enableLogging() {
@@ -436,6 +488,7 @@ IField.propTypes = {
     options: PropTypes.shape({
         autoFormat: PropTypes.bool,
         autoFormatSeparator: PropTypes.string,
+        blockNonNumericInput: PropTypes.bool,
         autoSubmit: PropTypes.bool,
         autoSubmitFormId: PropTypes.string,
         enableLogging: PropTypes.bool,
