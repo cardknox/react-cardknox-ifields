@@ -3,6 +3,7 @@
 ## changelog for version 2.2.60
 
 - added ApplePay Component
+- added setting to block non-numeric characters
 
 ## changelog for version 2.2.59
 
