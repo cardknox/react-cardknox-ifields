@@ -16,7 +16,7 @@ export default function AppForm() {
   const [zip, setZip] = useState('98765');
   const [mobile, setMobile] = useState('1234567890');
   const [email, setEmail] = useState('test@test.com');
-  const [expMonth, setExpMonth] = useState(new Date().getMonth());
+  const [expMonth, setExpMonth] = useState(new Date().getMonth() + 1);
   const [expYear, setExpYear] = useState(new Date().getFullYear());
   const [gatewayResponse, setGatewayResponse] = useState('');
   const [gateway3dsResponse, setGateway3dsResponse] = useState('');
