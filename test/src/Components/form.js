@@ -142,23 +142,6 @@ export default function AppForm() {
     };
   };
 
-  const getApplePayShippingMethods = () => {
-    return [
-        {
-            label: 'Free Shipping',
-            amount: '0.00',
-            identifier: 'free',
-            detail: 'Delivers in five business days',
-        },
-        {
-            label: 'Express Shipping',
-            amount: '1.50',
-            identifier: 'express',
-            detail: 'Delivers in two business days',
-        },
-    ];
-  };
-
   const applePayPaymentAuthorize = paymentResponse => {
     return new Promise(function (resolve, reject) {
         try {

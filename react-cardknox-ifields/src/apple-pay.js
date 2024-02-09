@@ -222,10 +222,10 @@ class CardknoxApplePay extends Component {
     }
 
     onValidateMerchant = async (event) => {
-        const {session} = this.state;
+        const {session, enableLogging} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError(this.state.enableLogging, "onValidateMerchant", "Not trusted");
+                lib.logError(enableLogging, "onValidateMerchant", "Not trusted");
                 session.abort();
             }
             const response = this.props.onValidateMerchant ?
@@ -234,7 +234,7 @@ class CardknoxApplePay extends Component {
             const resp = typeof(response) === "string" ? JSON.parse(response) : response;
             session.completeMerchantValidation(resp);
         } catch (err) {
-            lib.logError(this.state.enableLogging, "onValidateMerchant error", err);
+            lib.logError(enableLogging, "onValidateMerchant error", err);
             session.abort();
         }
     }
@@ -244,10 +244,10 @@ class CardknoxApplePay extends Component {
     }
 
     onPaymentAuthorize = async (event) => {
-        const {session} = this.state;
+        const {session, enableLogging} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError(this.state.enableLogging, "onPaymentAuthorize", "Not trusted");
+                lib.logError(enableLogging, "onPaymentAuthorize", "Not trusted");
                 session.abort();
             }
             const response = await this.props.onPaymentAuthorize(event.payment);
@@ -256,7 +256,7 @@ class CardknoxApplePay extends Component {
                 this.props.onPaymentComplete({response: response});
             }            
         } catch (error) {
-            lib.logError(this.state.enableLogging, "onPaymentAuthorize error", error);
+            lib.logError(enableLogging, "onPaymentAuthorize error", error);
             session.abort();
             if (this.props.onPaymentComplete) {
                 this.props.onPaymentComplete({error: error});
@@ -265,10 +265,10 @@ class CardknoxApplePay extends Component {
     }
 
     onShippingContactSelected = async (event) => {
-        const {session, appVersion, total, lineItems, shippingMethods} = this.state;
+        const {session, appVersion, total, lineItems, shippingMethods, enableLogging} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError(this.state.enableLogging, "onShippingContactSelected", "Not trusted");
+                lib.logError(enableLogging, "onShippingContactSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
@@ -296,16 +296,16 @@ class CardknoxApplePay extends Component {
             appVersion >= 3 ? session.completeShippingContactSelection(finalResp)
                             : session.completeShippingContactSelection(window.ApplePaySession.STATUS_SUCCESS, finalResp.newShippingMethods, finalResp.newTotal, finalResp.newLineItems);
         } catch (err) {
-            lib.logError(this.state.enableLogging, "onShippingContactSelected error", err);
+            lib.logError(enableLogging, "onShippingContactSelected error", err);
             session.abort();
         }        
     }
 
     onShippingMethodSelected = async (event) => {
-        const {session, appVersion, total, lineItems, shippingMethods} = this.state;
+        const {session, appVersion, total, lineItems, shippingMethods, enableLogging} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError(this.state.enableLogging, "onShippingMethodSelected", "Not trusted");
+                lib.logError(enableLogging, "onShippingMethodSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
@@ -331,26 +331,29 @@ class CardknoxApplePay extends Component {
                 };
             }
             appVersion >= 3 ? session.completeShippingMethodSelection(finalResp)
-                            : session.completeShippingMethodSelection(window.ApplePaySession.STATUS_SUCCESS, finalResp.total, finalResp.lineItems);
+                            : session.completeShippingMethodSelection(window.ApplePaySession.STATUS_SUCCESS, finalResp.newTotal, finalResp.newLineItems);
         } catch (err) {
-            lib.logError(this.state.enableLogging, "onShippingMethodSelected error", err);
+            lib.logError(enableLogging, "onShippingMethodSelected error", err);
             session.abort();
         }
     }
 
     onPaymentMethodSelected = async (event) => {            
-        const {session, appVersion, total, lineItems, shippingMethods} = this.state;
+        const {session, appVersion, total, lineItems, shippingMethods, enableLogging} = this.state;
         try {
             if (!event.isTrusted) {
-                lib.logError(this.state.enableLogging, "onPaymentMethodSelected", "Not trusted");
+                lib.logError(enableLogging, "onPaymentMethodSelected", "Not trusted");
                 session.abort();
             }
             let finalResp = null;
+            lib.logDebug(enableLogging, "appVersion", appVersion);
             if (this.props.onPaymentMethodSelected) {
+                lib.logDebug(enableLogging, "onPaymentMethodSelected", event.paymentMethod);
                 const response = await this.props.onPaymentMethodSelected(event.paymentMethod);
+                lib.logDebug(enableLogging, "onPaymentMethodSelected response", response);
                 this.validateFeatures(response);
                 if (appVersion >= 3) {
-                    const finalResp = { 
+                    finalResp = { 
                         newTotal: response.total,
                         newLineItems: response.lineItems
                     };
@@ -371,10 +374,11 @@ class CardknoxApplePay extends Component {
                     newShippingMethods: shippingMethods
                 };
             }
+            lib.logDebug(enableLogging, "finalResp", finalResp);
             appVersion >= 3 ? session.completePaymentMethodSelection(finalResp)
-                            : session.completePaymentMethodSelection(finalResp.total, finalResp.lineItems);
+                            : session.completePaymentMethodSelection(finalResp.newTotal, finalResp.newLineItems);
         } catch (err){
-            lib.logError(this.state.enableLogging, "onPaymentMethodSelected error", err);
+            lib.logError(enableLogging, "onPaymentMethodSelected error", err);
             session.abort();
         }
     }
