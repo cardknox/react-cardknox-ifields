@@ -32,8 +32,9 @@ export interface UpdateData {
     isValid: boolean,
     length: number,
     cardNumberLength: number,
-    type: string,
-    issuer: string
+    event: string,
+    issuer: string,
+    ifieldValueChanged: boolean
 }
 
 export interface TokenData {

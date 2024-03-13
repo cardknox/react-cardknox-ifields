@@ -117,7 +117,7 @@ export default class App extends React.Component {
     return <IField onUpdate={this.onUpdate} />
   }
   onUpdate = (data) => {
-    switch (data.type) {
+    switch (data.event) {
       case 'input':
         console.log("input event received");
         break;
@@ -429,19 +429,19 @@ For full documentation about 3D-Secure with iFields see [here](https://docs.card
         <td>The length of the data in the card iField <br/> Only returned on an update event from the card iField</td>
     </tr>
     <tr>
-        <td>type</td>
+        <td>event</td>
         <td>String</td>
-        <td>The name of the event</td>
+        <td>The name of the event.</td>
     </tr>
     <tr>
         <td>isEmpty</td>
         <td>Boolean</td>
-        <td>Whether or not the iField is empty</td>
+        <td>Whether or not the iField is empty.</td>
     </tr>
     <tr>
         <td>isValid</td>
         <td>Boolean</td>
-        <td>Whether or not the data in the iField is valid</td>
+        <td>Whether or not the data in the iField is valid.</td>
     </tr>
     <tr>
         <td>issuer</td>
@@ -452,6 +452,11 @@ For full documentation about 3D-Secure with iFields see [here](https://docs.card
         <td>length</td>
         <td>Boolean</td>
         <td>The length of the data in the iField <br/><emp>Note:</emp> For card iFields, this includes the formating character. Use <code>cardNumberlength</code> to get the actual data length.</td>
+    </tr>
+    <tr>
+        <td>ifieldValueChanged </td>
+        <td>Boolean</td>
+        <td>Whether or not the iField value has changed.</td>
     </tr>
 </table>
 
