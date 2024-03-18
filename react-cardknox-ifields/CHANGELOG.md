@@ -2,11 +2,8 @@
 
 ## changelog for version 2.2.62
 
-- corrected misnamed property in onUpdate
-    - Previous Name: `type` 
-    - Current Name `event`
+- fixed type declarations
 
-- added `ifieldValueChanged` property to onUpdate
 
 ## changelog for version 2.2.60
 
