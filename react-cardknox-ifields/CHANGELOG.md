@@ -1,8 +1,17 @@
 # Changelog
 
+## changelog for version 2.2.62
+
+- corrected misnamed property in onUpdate
+    - Previous Name: `type` 
+    - Current Name `event`
+
+- added `ifieldValueChanged` property to onUpdate
+
 ## changelog for version 2.2.60
 
 - added ApplePay Component
+
 - added setting to block non-numeric characters
 
 ## changelog for version 2.2.59
@@ -22,7 +31,11 @@
 ## changelog for version 1.0.0
 
 - initial publish
+
 - stop auto-submitting when `autoSubmit` is false
+
 - resubmit when data has changed
+
 - hard-coded the iFields version for improved stability
+
 - return 'unknown' when `issuer` is unknown
