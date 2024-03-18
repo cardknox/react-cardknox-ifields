@@ -4,7 +4,6 @@
 
 - fixed type declarations
 
-
 ## changelog for version 2.2.60
 
 - added ApplePay Component
