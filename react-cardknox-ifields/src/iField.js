@@ -535,7 +535,8 @@ IField.defaultProps = {
  * @property {number} length
  * @property {number} cardNumberLength
  * @property {string} issuer
- * @property {string} type
+ * @property {string} event
+ * @property {boolean} ifieldValueChanged
  */
 /**
  * @typedef SubmitData
