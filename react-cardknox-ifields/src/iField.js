@@ -249,7 +249,7 @@ export default class IField extends React.Component {
 
     transformAccountData(account) {
         const xSoftwareName = account.xSoftwareName;
-        return Object.assign({}, account, { xSoftwareName: `(${PLUGIN_NAME}) ${xSoftwareName}` });
+        return { ...account, xSoftwareName: `(${PLUGIN_NAME}) ${xSoftwareName}` };
     }
 
     /**
