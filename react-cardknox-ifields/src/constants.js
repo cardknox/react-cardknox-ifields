@@ -29,3 +29,4 @@ export const THREEDS_ENVIRONMENT = {
   Production: 'production',
   Staging: 'staging'
 };
+export const PLUGIN_NAME = 'react-cardknox-ifields';

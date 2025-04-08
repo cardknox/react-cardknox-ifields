@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
     LOADED, TOKEN, PING, STYLE, ERROR, AUTO_SUBMIT, BLOCK_NON_NUMERIC_INPUT, UPDATE, GET_TOKEN, INIT, FORMAT, SET_PLACEHOLDER, FOCUS, CLEAR_DATA,
     CARD_TYPE, SET_ACCOUNT_DATA, ENABLE_LOGGING, ENABLE_AUTO_SUBMIT, ENABLE3DS, DISABLE3DS,
-    AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE
+    AUTO_FORMAT_DEFAULT_SEPARATOR, UPDATE_ISSUER, IFIELD_ORIGIN, IFIELDS_VERSION, CVV_TYPE, PLUGIN_NAME
 } from "./constants";
 
 export default class IField extends React.Component {
@@ -246,6 +246,12 @@ export default class IField extends React.Component {
         this.logAction(PING);
         this.postMessage(message);
     }
+
+    transformAccountData(account) {
+        const xSoftwareName = account.xSoftwareName;
+        return Object.assign({}, account, { xSoftwareName: `(${PLUGIN_NAME}) ${xSoftwareName}` });
+    }
+
     /**
      * 
      * @param {AccountData} data 
@@ -253,7 +259,7 @@ export default class IField extends React.Component {
     setAccount(data) {
         const message = {
             action: SET_ACCOUNT_DATA,
-            data
+            data: this.transformAccountData(data)
         };
         this.logAction(SET_ACCOUNT_DATA);
         this.postMessage(message);
