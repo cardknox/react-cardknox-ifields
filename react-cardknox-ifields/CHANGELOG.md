@@ -1,5 +1,9 @@
 # Changelog
 
+## changelog for version 2.2.75
+
+- add plugin name
+
 ## changelog for version 2.2.62
 
 - fixed type declarations
