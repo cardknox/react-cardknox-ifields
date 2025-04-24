@@ -50,7 +50,7 @@ export interface ErrorData {
 
 export interface Props {
     account: Account,
-    threeds?: ThreeDS,
+    threeDS?: ThreeDS,
     options?: Options,
     issuer?: string,
     type: string,
