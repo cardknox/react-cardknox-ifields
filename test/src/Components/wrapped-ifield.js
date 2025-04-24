@@ -68,7 +68,7 @@ const WrappedIfield = React.forwardRef((props, ref) => {
     type={ifieldType}
     account={account}
     options={options}
-    threeDS={ifieldType === CARD_TYPE ? threeds : null}
+    threeds={ifieldType === CARD_TYPE ? threeds : null}
     onLoad={onLoad}
     onUpdate={onUpdate}
     onSubmit={onSubmit}
