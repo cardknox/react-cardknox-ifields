@@ -1,10 +1,10 @@
 export interface Options {
-    placeholder: string,
-    enableLogging: boolean,
-    autoFormat: boolean,
-    autoFormatSeparator: string,
-    autoSubmit: boolean,
-    iFieldstyle: object
+    placeholder?: string,
+    enableLogging?: boolean,
+    autoFormat?: boolean,
+    autoFormatSeparator?: string,
+    autoSubmit?: boolean,
+    iFieldstyle?: object
 }
 
 export function Handle3DSResults(actionCode: string,
@@ -50,15 +50,15 @@ export interface ErrorData {
 
 export interface Props {
     account: Account,
-    threeds: ThreeDS,
-    options: Options,
-    issuer: string,
+    threeds?: ThreeDS,
+    options?: Options,
+    issuer?: string,
     type: string,
-    onLoad: () => void,
-    onUpdate: (data: UpdateData) => void,
-    onSubmit: () => void,
+    onLoad?: () => void,
+    onUpdate?: (data: UpdateData) => void,
+    onSubmit?: () => void,
     onToken: (data: TokenData) => void,
-    onError: (data: ErrorData) => void
+    onError?: (data: ErrorData) => void
 }
 
 export const CARD_TYPE: string;
@@ -69,8 +69,7 @@ export const THREEDS_ENVIRONMENT = {
     Staging: string
 }
 
-export default class IField {
-    constructor(props: Props) { }
+export default class IField extends React.Component<Props> {
 }
 
 //Apple Pay
