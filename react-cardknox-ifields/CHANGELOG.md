@@ -1,5 +1,9 @@
 # Changelog
 
+## changelog for version 2.2.76
+
+- update iFields version to 3.0.2503.2101
+
 ## changelog for version 2.2.75
 
 - add plugin name
