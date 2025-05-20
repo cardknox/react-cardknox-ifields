@@ -3,6 +3,7 @@
 ## changelog for version 2.2.75
 
 - add plugin name
+- Update Type Definition
 
 ## changelog for version 2.2.62
 
