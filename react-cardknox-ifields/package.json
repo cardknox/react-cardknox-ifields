@@ -1,6 +1,6 @@
 {
   "name": "@cardknox/react-ifields",
-  "version": "2.2.75-beta.2",
+  "version": "2.2.75",
   "description": "A React component for Cardknox iFields",
   "license": "MIT",
   "main": "build/index.js",
