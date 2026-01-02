@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "axios": "^1.8.2",
-    "express": "^4.21.2"
+    "express": "^4.22.1"
   },
   "proxy": "http://localhost:8082"
 }
