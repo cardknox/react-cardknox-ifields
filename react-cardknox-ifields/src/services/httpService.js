@@ -1,4 +1,4 @@
-import { each } from 'lodash';
+import { each, has } from 'lodash';
 import * as lib from '../lib';
 
 class HttpService {
@@ -35,9 +35,34 @@ class HttpService {
 		return { data, ok: response.ok, status: response.status };
 	};
 
+	buildValidatedUrl(baseUrl) {
+		try {
+			// Minimal path validation
+			if (baseUrl.includes('/../') || /\/%2e%2e\//i.test(baseUrl)) {
+				throw new Error('Invalid path');
+			}
+			
+			const url = new URL(baseUrl);
+			
+			// Protocol + host checks
+			const allowedDomains = ['api.cardknox.com', 'cdn.cardknox.com']; // add your allowed domains here
+			if (!allowedDomains.includes(url.hostname)) {
+				throw new Error('Invalid host');
+			}
+			if (!['http:', 'https:'].includes(url.protocol)) {
+				throw new Error('Invalid protocol');
+			}
+			
+			return url.href;
+		} catch {
+			throw new Error('Invalid URL');
+		}
+	}
+
 	httpRequest(url, options, body) {
 		const { enableLogging } = this.state;
-		const request = new Request(url, options);
+		const validatedUrl = this.buildValidatedUrl(url);
+		const request = new Request(validatedUrl, options);
 
 		return new Promise((resolve, reject) => {
 			fetch(request)
@@ -48,7 +73,7 @@ class HttpService {
 				)
 				.then(response => this.checkIfError(response))
 				.then(response => {
-					lib.logDebug(enableLogging, `url: ${url}`,`request: ${JSON.stringify(body)}`, `response: ${JSON.stringify(response)}`);
+					lib.logDebug(enableLogging, `url: ${validatedUrl}`,`request: ${JSON.stringify(body)}`, `response: ${JSON.stringify(response)}`);
 					return resolve(response.data);
 				})
 				.catch(ex => {
@@ -56,7 +81,7 @@ class HttpService {
 						resolve();
 					} else {
 						const response = ex && ex.response;
-						lib.logError(enableLogging, `url: ${url};\nrequest: ${body}`, response);
+						lib.logError(enableLogging, `url: ${validatedUrl};\nrequest: ${body}`, response);
 						reject(ex);
 					}
 				});
