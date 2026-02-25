@@ -6,7 +6,7 @@
   "main": "build/index.js",
   "dependencies": {
     "prop-types": "^15.8.1",
-    "react": "^18.2.0"
+    "react": "^18.3.1"
   },
   "scripts": {
     "start": "webpack --watch",
@@ -25,16 +25,16 @@
     "url": "git+https://github.com/cardknox/react-cardknox-ifields.git"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.18.9",
-    "@babel/plugin-transform-private-property-in-object": "^7.18.9",
-    "@babel/preset-env": "^7.19.1",
-    "@babel/preset-react": "^7.18.6",
-    "babel-loader": "^8.2.5",
-    "css-loader": "^6.9.1",
-    "lodash": "^4.17.21",
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-transform-private-property-in-object": "^7.28.6",
+    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-react": "^7.28.5",
+    "babel-loader": "^8.4.1",
+    "css-loader": "^6.11.0",
+    "lodash": "^4.17.23",
     "style-loader": "^3.3.4",
-    "webpack": "^5.89.0",
+    "webpack": "^5.105.2",
     "webpack-cli": "^5.1.4"
   },
   "keywords": [
