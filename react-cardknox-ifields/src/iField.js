@@ -533,6 +533,7 @@ IField.defaultProps = {
  * @typedef TokenData
  * @property {string} xToken
  * @property {string} xTokenType
+ * @property {string} xTokenCreationTime
  */
 /**
  * @typedef UpdateData
