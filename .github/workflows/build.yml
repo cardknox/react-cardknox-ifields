@@ -21,6 +21,11 @@ concurrency:
 
 env:
   NODE_VERSION: 20.x
+  # Node 20 ships npm 10, which tries to materialise optional peer
+  # dependencies that the newer npm maintaining our lockfiles omits - it fails
+  # `npm ci` in test/ on postcss-load-config's optional `yaml` peer. Node stays
+  # on 20 for react-scripts/jest compatibility, so pin npm separately.
+  NPM_VERSION: 11
   # Pinned to an immutable GitHub release asset and checksum-verified on download.
   # Bump both values together: https://github.com/AikidoSec/safe-chain/releases
   SAFE_CHAIN_RELEASE: 1.5.15
@@ -57,6 +62,11 @@ jobs:
       # PATH updates from the step above only apply to subsequent steps.
       - name: Report Safe Chain version
         run: safe-chain --version
+
+      # Installed through the shims above, so the upgrade is itself gated. The
+      # canary below then runs against the npm that performs the real installs.
+      - name: Pin npm to ${{ env.NPM_VERSION }}
+        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       # Proves the gate is armed. The installer only warns if its setup step
       # fails, so without this a Safe Chain install that never hooked npm would
