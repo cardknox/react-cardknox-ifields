@@ -1,3 +1,11 @@
+merge_protections:
+  - name: build must pass
+    description: The build workflow (Aikido Safe Chain malware gate, build and tests) must succeed before a pull request can be merged.
+    if:
+      - base=master
+    success_conditions:
+      - check-success=build
+
 queue_rules:
   - name: default
     queue_conditions:
