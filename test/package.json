@@ -44,6 +44,9 @@
     "postcss-svgo": {
       "svgo": "^2.8.1"
     },
+    "resolve-url-loader": {
+      "postcss": "^8.4.31"
+    },
     "serialize-javascript": "^7.0.3",
     "underscore": "^1.13.8"
   },
