@@ -39,6 +39,9 @@
     "express": "^4.22.2"
   },
   "overrides": {
+    "http-proxy-agent": {
+      "@tootallnate/once": "^2.0.1"
+    },
     "lodash": "^4.18.1",
     "nth-check": "^2.0.1",
     "postcss-svgo": {
